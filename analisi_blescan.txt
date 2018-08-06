@@ -1,0 +1,24 @@
+ANALISI DEI METODI DEL FILE blescan.py
+
+returnnumberpacket (INUTILE AI FINI DELLA TESI)
+Ritorna il numero di pacchetti scambiati.
+
+returnstringpacket (INUTILE AI FINI DELLA TESI)
+Ritorna un numero legato a una stringa.
+
+printpacket 
+Permette di scrivere i paccheeti ricevuti, compresi i dati identificativi del dispositivo.
+
+get_packet_bdaddr
+Permette di ottenere il BD_ADDR dal pacchetto ricevuto.
+
+packed_bdaddr_to_string
+Trasforma il pacchetto del BD_ADDR in stringa per successive analisi da parte di altri metodi.
+
+hci_enable_le_scan
+Abilita la possibilità di effettuare lo scan in modalità LE con hcitool
+
+hci_disable_le_scan
+Disabilita la possibilità di effettuare lo scan in modalità LE con hcitool
+
+hci_toogle_le_scan
