@@ -14,7 +14,7 @@ import time
 
 serviceDS = DiscoveryService()
 serviceBS = BeaconService()
-devices = service.discover(2)
+devices = serviceDS.discover(20)
 
 for address, name in devices.items():
     print("name: {}, address: {}".format(name, address))
