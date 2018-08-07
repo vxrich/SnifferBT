@@ -22,3 +22,10 @@ hci_disable_le_scan
 Disabilita la possibilità di effettuare lo scan in modalità LE con hcitool
 
 hci_toogle_le_scan
+Funzione chiamata dalle 2 precedenti per attuare il cambiamento in base al valore passato
+
+hci_le_set_scan_parameters
+
+
+parse_events
+Esegue l'invio dei pacchetti di inquiry e ne ritorna i risultati.

@@ -1,15 +1,10 @@
-import bluetooth
-print "looking for nearby devices..."
-nearby_devices = bluetooth.discover_devices(lookup_names = False, flush_cache = True, duration = 20)
-print "found %d devices" % len(nearby_devices)
-for addr, name in nearby_devices:
-	print " %s - %s" % (addr, name)
-	for services in bluetooth.find_service(address = addr):
-		print " Name: %s" % (services["name"])
-		print " Description: %s" % (services["description"])
-		print " Protocol: %s" % (services["protocol"])
-		print " Provider: %s" % (services["provider"])
-		print " Port: %s" % (services["port"])
-		print " Service id: %s" % (services["service-id"])
-		print ""
-		print ""
+from bluetooth import bluez
+from bluetooth import ble 
+
+print "Start scanning devices ..."
+
+devices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True)
+#devices = ble.discover_devices()
+
+for device in devices:
+	print device
