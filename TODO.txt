@@ -1,0 +1,21 @@
+Lista TODO snifferBT.py 
+
+- Scansione dei dispositivi e creazione lista (funzione specifica) con:
+    mac
+    nome
+    orario/data
+    rssi
+    paired_with (?)
+
+- Funzione per caricare i dati nel database
+
+
+
+----------------------------------------------------------------------
+Lista TODO 
+
+- Programma "Server" che analizza il database e ritorna una semplice analisi
+
+- Creazione database sul RPi Server
+
+- Rendere visibili fra loro i RPi
