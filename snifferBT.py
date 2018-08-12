@@ -24,8 +24,8 @@ DB_NAME = ""
 
 LOAD_QUERY = ""
 
-db = MySQLdb.connect(HOST, ID, PSW, DB_NAME)
-cur = db.cursor()
+#db = MySQLdb.connect(HOST, ID, PSW, DB_NAME)
+#cur = db.cursor()
 
 
 def scan_devices():
