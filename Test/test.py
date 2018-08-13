@@ -1,8 +1,6 @@
 from bluetooth import bluez
 from bluetooth import ble 
-from bluetooth import 
 from bleep import BLEDevice
-import bluepy
 import datetime
 
 print "Debug"
@@ -12,7 +10,7 @@ while True:
         print datetime.datetime.now()   
         #devices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True, device_id=0)
         #devices = ble.discover_devices()
-        devices = BLEDevice.discoverDevices()
+        devices = BLEDevice.discoverDevices(device="hci0", timeout=3)
 
 
         for device in devices:
