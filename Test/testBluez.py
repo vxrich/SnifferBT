@@ -3,7 +3,7 @@ from bluetooth import ble
 from bluetooth import *
 import datetime
 
-print "Debug"
+print "-- Test Bluez Module --"
 print "Start scanning devices ..."
 
 while True:
