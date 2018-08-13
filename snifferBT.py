@@ -12,8 +12,7 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 
 from bluetooth import bluez #Modulo base per l'interazione bluetooth 
 from bluetooth import ble #Modulo per lo scanning BLE
-import MySQLdb #Modulo interazione DB dei dispositivi scansionati
-import time
+import MySQLdb #Modulo interazione DB 
 
 WAITING_TIME = 120 #Secondi
 
