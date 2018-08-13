@@ -5,12 +5,9 @@ from bluetooth import btcommon
 print "Debug"
 print "Start scanning devices ..."
 
-try: 
-        devices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True, device_id=0)
-        #devices = ble.discover_devices()
-        
-except btcommon.BluetoothError as error:
-        print "Caught BluetoothError: ", error
+
+devices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True, device_id=0)
+#devices = ble.discover_devices()
 
 
 for device in devices:
