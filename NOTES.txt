@@ -1,0 +1,11 @@
+MAC ADDRESS TELEFONO: 1C:23:2C:03:F7:04
+
+BluePy --> Lavora bene, non trova il cellulare
+Bleep --> Non funziona
+Bluez --> Crash il WiFi, ma quando non crasha riesce a trovare qualcosa
+BluezBLE --> Non funzione, non esiste discover_devices()
+
+ID107 HR --> Facile da trovare.
+MOTO 360 --> Non facile da trovare, sembra funzioni da master.
+CARDIO BELT POLAR --> Non si accende per ora.
+
