@@ -1,7 +1,7 @@
 from bluetooth import bluez
 from bluetooth import ble 
-from bluetooth import *
 import datetime
+import os
 
 print "-- Test Bluez Module --"
 print "Start scanning devices ..."

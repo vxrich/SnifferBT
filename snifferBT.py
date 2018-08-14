@@ -8,10 +8,8 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 
 '''
 
-#Questo codice trova il telefono sia da RPi sia da MiNotebook (Funziona una volta poi non funziona più)
+#Il migliore da implementare sarebbe BluePy
 
-from bluetooth import bluez #Modulo base per l'interazione bluetooth 
-from bluetooth import ble #Modulo per lo scanning BLE
 import MySQLdb #Modulo interazione DB 
 
 WAITING_TIME = 120 #Secondi
@@ -31,8 +29,7 @@ def scan_devices():
 
     print "Start scanning devices ..."
     
-    devices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True)
-    #devices = ble.discover_devices()
+    
 
     print "Printing Data ..."
 
