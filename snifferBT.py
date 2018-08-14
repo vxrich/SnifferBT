@@ -8,8 +8,13 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 
 '''
 
-#Il migliore da implementare sarebbe BluePy
+#implementazione dello scanner BLE con BluePy e scanner non BLE con Bluez
 
+import datetime
+import os
+
+from bluepy.btle import Scanner
+from bluetooth import bluez
 import MySQLdb #Modulo interazione DB 
 
 WAITING_TIME = 120 #Secondi
