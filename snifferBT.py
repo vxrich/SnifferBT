@@ -20,6 +20,11 @@ import MySQLdb #Modulo interazione DB
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi
 
+COMPLETE_NAME = 0X09 #ID nome nell'oggetto ScanEntry
+PUBLIC_TARGET_ADDRESS = 0X17
+RANDOM_TARGET_ADDRESS = 0x18
+
+#Dati per la connessione con il DataBase
 HOSTNAME = ""
 ID = ""
 PSW = ""
@@ -37,8 +42,6 @@ def scan_devices():
     
     
 
-    print "Printing Data ..."
-
     return devices
 
 def lescan_devices():
@@ -47,10 +50,9 @@ def lescan_devices():
 
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
+    clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
 
-    print "Printing data ..."
-    for dev in devices:
-        
+    for dev in clean_dev:
         print "%s - %s - %d" % (dev.name, dev.addr, dev.rssi)
 
     

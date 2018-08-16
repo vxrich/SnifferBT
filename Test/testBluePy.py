@@ -15,14 +15,16 @@ scanner = Scanner().withDelegate(ScanDelegate())
 """
 
 COMPLETE_NAME = 0X09
+PUBLIC_TARGET_ADDRESS = 0x17
 
 scanner = Scanner()
 
 devices = scanner.scan(10)
 
-clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in devices]
+clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.getValueText(PUBLIC_TARGET_ADDRESS), dev.rssi] for dev in devices]
 
-print clean_dev
+for dev in clean_dev:
+    print dev
 
 """
 for dev in devices:
