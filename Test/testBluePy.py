@@ -18,7 +18,7 @@ scanner = Scanner()
 
 devices = scanner.scan(10)
 
-clean_dev = [[dev.name, dev.addr, dev.rssi] for dev in devices]
+clean_dev = [[dev.COMPLETE_LOCAL_NAME, dev.addr, dev.rssi] for dev in devices]
 
 print clean_dev
 
