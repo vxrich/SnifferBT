@@ -1,5 +1,6 @@
 from bluepy.btle import Scanner, DefaultDelegate
 
+"""
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
@@ -9,8 +10,11 @@ class ScanDelegate(DefaultDelegate):
             print "Discovered device", dev.addr
         elif isNewData:
             print "Received new data from", dev.addr
+"""
 
-scanner = Scanner().withDelegate(ScanDelegate())
+#scanner = Scanner().withDelegate(ScanDelegate())
+scanner = Scanner()
+
 devices = scanner.scan(10)
 
 for dev in devices:

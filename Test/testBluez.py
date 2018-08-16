@@ -5,6 +5,8 @@ import os
 os.system("sudo hciconfig hci0 down")
 os.system("sudo hciconfig hci0 up")
 
+print "hci0 sets as up"
+
 from bluetooth import bluez
 import datetime
 

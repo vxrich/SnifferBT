@@ -40,6 +40,14 @@ def scan_devices():
 
     return devices
 
+def lescan_devices():
+
+    print "Start scanning LE devices ..."
+
+
+    print "Printing data ..."
+    return devices
+
 def print_devices(devices):
 
     for address, name in devices.items():

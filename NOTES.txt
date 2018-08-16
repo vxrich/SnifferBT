@@ -1,21 +1,37 @@
-MAC ADDRESS TELEFONO: 1C:23:2C:03:F7:04
+MAC ADDRESS GALAXY A5: 1C:23:2C:03:F7:04
 MAC ADDRESS ID107 HR: C1:91:34:83:0E:F0
 MAC ADDRESS webOS TV: 14:BB:6E:02:E2:79 (public) /7D:99:6A:39:EF:F8 (random)
-
-BluePy --> Lavora bene, non trova il cellulare, ne il MOTO360
-Bleep --> Non funziona
-Bluez --> Per non far crashare il WiFi bisonga fare down e up di hci0 tramite hciconfig 
-            (ma comunque non funziona sempre -.-)
-BluezBLE --> Non funzione, non esiste discover_devices()
-hcitool lescna --> Vede ID107 HR ma non vede telefono e MOTO360
-iBeacon --> Rileva tutti i dispositivi che fanno advertising in modalità slave (smartband, webtv)
 
 ID107 HR --> Facile da trovare.
 MOTO 360 --> Non facile da trovare, sembra faccia advertising.
 CARDIO BELT POLAR --> Non si accende per ora.
+GALAXY A5 --> Probabilemente esegue lo scan non in BLE 
+
+---------------------------------------------------------------------------------------
+
+// BluePy //
+Lavora bene, non trova il cellulare, ne il MOTO360
+
+// Bleep //
+Non funziona
+
+// Bluez //
+Per non far crashare il WiFi bisonga fare down e up di hci0 tramite hciconfig 
+(ma comunque non funziona sempre -.-)
+Lo scan funziona correttamente basta non farlo partire con SSH altrimenti salta 
+la connessione, facendolo partire direttamente dalla RPi fa saltare la connessione 
+WiFi del pertatile senza essere collegato ad esso in SSH
+
+// BluezBLE //
+Non funzione, non esiste discover_devices()
+
+// hcitool lescnan //
+Vede ID107 HR ma non vede telefono e MOTO360
+
+// iBeacon //
+Rileva tutti i dispositivi che fanno advertising in modalità slave (smartband, webtv)
+
+--------------------------------------------------------------------------------------
 
 BluePy per i dispositivi BLE con advertising e Bluez per i dispositivi non BLE o comunque che non 
 lo usano di default (Smartphone)
-
-In esecuzioni consecutive Bluez funziona se eseguito da ambiente python nel terminale ma non
-se eseguito da testBluez.py
