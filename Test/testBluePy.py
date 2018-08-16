@@ -10,14 +10,19 @@ class ScanDelegate(DefaultDelegate):
             print "Discovered device", dev.addr
         elif isNewData:
             print "Received new data from", dev.addr
+
+scanner = Scanner().withDelegate(ScanDelegate())
 """
 
-#scanner = Scanner().withDelegate(ScanDelegate())
 scanner = Scanner()
 
 devices = scanner.scan(10)
 
+print devices
+
+"""
 for dev in devices:
     print "Device %s (%s), RSSI=%d dB" % (dev.addr, dev.addrType, dev.rssi)
     for (adtype, desc, value) in dev.getScanData():
         print "  %s = %s" % (desc, value)
+"""

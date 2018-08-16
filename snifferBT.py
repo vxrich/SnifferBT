@@ -18,6 +18,7 @@ from bluetooth import bluez
 import MySQLdb #Modulo interazione DB 
 
 WAITING_TIME = 120 #Secondi
+SCAN_TIME = 10 #Secondi
 
 HOSTNAME = ""
 ID = ""
@@ -44,6 +45,7 @@ def lescan_devices():
 
     print "Start scanning LE devices ..."
 
+    ledevices = lescanner.scan(SCAN_TIME)
 
     print "Printing data ..."
     return devices
@@ -57,6 +59,8 @@ def load_data():
     
     cur.execute(LOAD_QUERY)
 
+
+lescanner = Scanner()
 
 while True:
 
