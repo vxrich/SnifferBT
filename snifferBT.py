@@ -30,11 +30,29 @@ ID = ""
 PSW = ""
 DB_NAME = ""
 
+#Query
 LOAD_QUERY = ""
+
+devices = []
 
 #db = MySQLdb.connect(HOST, ID, PSW, DB_NAME)
 #cur = db.cursor()
 
+class ScanedDevice:
+    
+    self.addr = ""
+    self.name = ""
+    self.rssi = None
+
+    def _init_(self, name, addr, rssi):
+        self.name = name
+        self.addr = addr
+        self.rssi = rssi
+
+    def printData():
+        print "%s -%s %d" % (self.name, self.addr, self.rssi)
+
+    def
 
 def scan_devices():
 
@@ -50,10 +68,11 @@ def lescan_devices():
 
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
-    clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
+    #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
+    devices.append([ [ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi)] for dev in ledevices ])
 
-    for dev in clean_dev:
-        print "%s - %s - %d" % (dev.name, dev.addr, dev.rssi)
+    for dev in devices:
+        dev.printData()
 
     
     return devices
