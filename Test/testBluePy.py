@@ -14,11 +14,13 @@ class ScanDelegate(DefaultDelegate):
 scanner = Scanner().withDelegate(ScanDelegate())
 """
 
+COMPLETE_NAME = 0X09
+
 scanner = Scanner()
 
 devices = scanner.scan(10)
 
-clean_dev = [[dev.COMPLETE_LOCAL_NAME, dev.addr, dev.rssi] for dev in devices]
+clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in devices]
 
 print clean_dev
 
