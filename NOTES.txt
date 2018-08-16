@@ -11,7 +11,8 @@ GALAXY A5 --> Probabilemente esegue lo scan non in BLE
 
 // BluePy //
 Lavora bene con i dispositivi BLE, non trova il cellulare, ne il MOTO360.
-Fornisce tutti i dati richiesti dal progetto di tesi
+Fornisce tutti i dati richiesti dal progetto di tesi.
+Ritorna un oggetto
 
 // Bleep //
 Non funziona

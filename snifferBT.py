@@ -45,9 +45,15 @@ def lescan_devices():
 
     print "Start scanning LE devices ..."
 
+    #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
 
     print "Printing data ..."
+    for dev in devices:
+        
+        print "%s - %s - %d" % (dev.name, dev.addr, dev.rssi)
+
+    
     return devices
 
 def print_devices(devices):
