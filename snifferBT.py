@@ -43,14 +43,18 @@ class ScanedDevice:
     self.addr = ""
     self.name = ""
     self.rssi = None
+    self.date = ""
+    self.time = ""
 
-    def _init_(self, name, addr, rssi):
+    def _init_(self, name, addr, rssi, date, time):
         self.name = name
         self.addr = addr
         self.rssi = rssi
+        self.date = date
+        self.time = time
 
     def printData():
-        print "%s -%s %d" % (self.name, self.addr, self.rssi)
+        print "%s - %s - %d - " % (self.name, self.addr, self.rssi)
 
     def
 
@@ -58,10 +62,12 @@ class ScanedDevice:
 def scan_devices():
 
     print "Start scanning devices ..."
+    date = datetime.date
+    time = datetime.time
     
-    scandevices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True, device_id=0)
+    scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
 
-    devices.append(ScanedDevice(name, addr) for addr, name in scandevices.items())
+    devices.append(ScanedDevice(name, addr, None, date, time) for addr, name in scandevices.items())
     
     for address, name in scandevices.items():
         print("name: {}, address: {}".format(name, address))
@@ -70,11 +76,13 @@ def scan_devices():
 def lescan_devices():
 
     print "Start scanning LE devices ..."
+    date = datetime.date
+    time = datetime.time
 
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
     #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
-    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi) for dev in ledevices )
+    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, date, time) for dev in ledevices )
 
     for dev in devices:
         dev.printData()
