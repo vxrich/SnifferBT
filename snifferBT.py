@@ -54,14 +54,19 @@ class ScanedDevice:
 
     def
 
+#Appende i dispositivi trovati nella lista devices
 def scan_devices():
 
     print "Start scanning devices ..."
     
+    scandevices = bluez.discover_devices(duration=2, flush_cache=True, lookup_names=True, device_id=0)
+
+    devices.append(ScanedDevice(name, addr) for addr, name in scandevices.items())
     
+    for address, name in scandevices.items():
+        print("name: {}, address: {}".format(name, address))
 
-    return devices
-
+#Appende i dispositivi BLE trovati nella lista devices
 def lescan_devices():
 
     print "Start scanning LE devices ..."
@@ -69,13 +74,11 @@ def lescan_devices():
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
     #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
-    devices.append([ [ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi)] for dev in ledevices ])
+    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi) for dev in ledevices )
 
     for dev in devices:
         dev.printData()
-
     
-    return devices
 
 def print_devices(devices):
 
