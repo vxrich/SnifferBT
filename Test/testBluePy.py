@@ -1,4 +1,5 @@
 from bluepy.btle import Scanner, DefaultDelegate
+import datetime
 
 """
 class ScanDelegate(DefaultDelegate):
@@ -17,14 +18,18 @@ scanner = Scanner().withDelegate(ScanDelegate())
 COMPLETE_NAME = 0X09
 PUBLIC_TARGET_ADDRESS = 0x17
 
+date = datetime.date
+time = datetime.time
+
+
 scanner = Scanner()
 
 devices = scanner.scan(10)
 
-clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in devices]
+clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, data, time] for dev in devices]
 
 for dev in clean_dev:
-    print dev[1]
+    print dev
 
 """
 for dev in devices:
