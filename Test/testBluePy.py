@@ -26,7 +26,7 @@ scanner = Scanner()
 
 devices = scanner.scan(10)
 
-clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, data, time] for dev in devices]
+clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in devices]
 
 for dev in clean_dev:
     print dev
