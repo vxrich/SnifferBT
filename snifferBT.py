@@ -25,18 +25,12 @@ PUBLIC_TARGET_ADDRESS = 0X17
 RANDOM_TARGET_ADDRESS = 0x18
 
 #Dati per la connessione con il DataBase
-HOSTNAME = ""
+HOST_NAME = ""
 ID = ""
 PSW = ""
 DB_NAME = ""
 
-#Query
-LOAD_QUERY = ""
-
 devices = []
-
-#db = MySQLdb.connect(HOST, ID, PSW, DB_NAME)
-#cur = db.cursor()
 
 class ScanedDevice:
     
@@ -84,15 +78,25 @@ def lescan_devices():
         dev.printData()
     
 
-def print_devices(devices):
+def piAdv():
 
-    for address, name in devices.items():
-        print("name: {}, address: {}".format(name, address))
 
-def load_data():
+
+def load_data(devices):
+
+    date = str(datetime.datetime.now().date())
+    time = str(datetime.datetie.now().time())
     
-    cur.execute(LOAD_QUERY)
+    db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME)
+    cur = db.cursor()
 
+    for dev in devices:
+        date = str(datetime.datetime.now().date())
+        time = str(datetime.datetie.now().time())
+        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %d, %s, %s)" &(dev.name, dev.addr, dev.rssi, date, time)) 
+
+    db.commit()
+    db.close
 
 lescanner = Scanner()
 
