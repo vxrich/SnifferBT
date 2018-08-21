@@ -13,6 +13,7 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 import datetime
 import os
 
+from bluetooth.ble import BeaconService
 from bluepy.btle import Scanner
 from bluetooth import bluez
 import MySQLdb #Modulo interazione DB 
@@ -30,8 +31,14 @@ ID = "rpi_1"
 PSW = ""
 DB_NAME = "devices_db"
 
+ADV_DATA = ""
+
 devices = []
 
+"""
+Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
+di un record nel database 
+"""
 class ScanedDevice:
     
     self.addr = ""
@@ -49,8 +56,21 @@ class ScanedDevice:
 
     def printData():
         print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
+"""
+Classe che crea un oggetto Beacon, in particolare un altro RPi che effettua la scansione 
+in un'altra parte dell'ambiente
+"""
+class RPiBeacon:
 
-    def
+    self.id = None
+    self.location = ""
+
+    def _init_(self, id, location):
+        self.id = id
+        self.location = location
+
+    def printData():
+        print "%d - %s" % (self.id, self.location)
 
 #Appende i dispositivi trovati nella lista devices
 def scan_devices():
@@ -82,6 +102,8 @@ def lescan_devices():
 
 def piAdv():
 
+    service = BeaconService()
+    service.start_advertising(ADV_DATA)
 
 
 def load_data(devices):

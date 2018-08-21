@@ -11,7 +11,7 @@ X Funzione per caricare i dati nel database
 
 - Funzione per avviare advertisig RPi
 
-
+- Beacon Scanner e lista RPiBeacon
 
 
 ----------------------------------------------------------------------
