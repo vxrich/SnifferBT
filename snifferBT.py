@@ -32,6 +32,9 @@ PSW = ""
 DB_NAME = "devices_db"
 
 ADV_DATA = ""
+ADV_TIME = 15
+
+BEACON_SCAN_TIME = 15
 
 devices = []
 
@@ -63,11 +66,13 @@ in un'altra parte dell'ambiente
 class RPiBeacon:
 
     self.id = None
+    self.addr = ""
     self.location = ""
+    self.rssi = None
 
-    def _init_(self, id, location):
+    def _init_(self, data, addr):
         self.id = id
-        self.location = location
+        self.addr = addr
 
     def printData():
         print "%d - %s" % (self.id, self.location)
@@ -103,8 +108,18 @@ def lescan_devices():
 def piAdv():
 
     service = BeaconService()
-    service.start_advertising(ADV_DATA)
+    service.start_advertising(ADV_DATA, 1, 1, 1, 200)
+    time.sleep(15)
+    service.stop_avertising()
 
+def beaconScan():
+
+    service = BeaconService()
+    devices = service.scan(BEACON_SCAN_TIME)
+
+    for address, data in list(devices.items()):
+        b = RPiBeacon(data, address)
+        print(b)
 
 def load_data(devices):
 
@@ -124,6 +139,7 @@ lescanner = Scanner()
 
 while True:
 
+    piAdv()
     scan_devices()
     lescan_devices()
 
