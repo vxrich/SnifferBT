@@ -48,7 +48,7 @@ class ScanedDevice:
         self.time = str(datetime.datetime.now().time())
 
     def printData():
-        print "%s - %s - %d - " % (self.name, self.addr, self.rssi)
+        print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
 
     def
 
@@ -56,11 +56,15 @@ class ScanedDevice:
 def scan_devices():
 
     print "Start scanning devices ..."
+    os.system("sudo hciconfig hci0 down")
+    os.system("sudo hciconfig hci0 up")
     
     scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
 
     devices.append(ScanedDevice(name, addr, None) for addr, name in scandevices.items())
     
+    for dev in scandevices:
+        dev.printData()
 
 #Appende i dispositivi BLE trovati nella lista devices
 def lescan_devices():
