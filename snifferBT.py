@@ -24,6 +24,7 @@ SCAN_TIME = 10 #Secondi
 COMPLETE_NAME = 0X09 #ID nome nell'oggetto ScanEntry
 PUBLIC_TARGET_ADDRESS = 0X17
 RANDOM_TARGET_ADDRESS = 0x18
+MANUFACTURER = 0xFF
 
 #Dati per la connessione con il DataBase
 HOST_NAME = "192.168.1.x"

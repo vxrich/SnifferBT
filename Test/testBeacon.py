@@ -3,7 +3,7 @@ import time
 
 service = BeaconService()
 
-service.start_advertising("11111111-2222-3333-4444-555555555555",
+service.start_advertising("aaaaaaaa-2222-3333-4444-555555555554",
             1, 1, 1, 200)
 
 time.sleep(25)
