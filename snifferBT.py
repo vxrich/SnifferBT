@@ -35,6 +35,7 @@ DB_NAME = "devices_db"
 ADV_DATA = ""
 ADV_TIME = 15
 
+UUID_DATA_STR = ""
 BEACON_SCAN_TIME = 15
 
 devices = []
@@ -104,12 +105,17 @@ def lescan_devices():
 
     for dev in devices:
         dev.printData()
+
+def uuidStrToHex(uuid_str):
+
     
+
+    return uuid_hex    
 
 def piAdv():
 
     service = BeaconService()
-    service.start_advertising(ADV_DATA, 1, 1, 1, 200)
+    service.start_advertising(uuidStrToHex(UUID_DATA_STR), 1, 1, 1, 200)
     time.sleep(15)
     service.stop_avertising()
 
