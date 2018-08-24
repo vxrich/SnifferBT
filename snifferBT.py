@@ -12,11 +12,14 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 
 import datetime
 import os
+import binascii
 
 from bluetooth.ble import BeaconService
 from bluepy.btle import Scanner
 from bluetooth import bluez
 import MySQLdb #Modulo interazione DB 
+
+RPI_ID = "rpi_1"
 
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi
@@ -35,7 +38,8 @@ DB_NAME = "devices_db"
 ADV_DATA = ""
 ADV_TIME = 15
 
-UUID_DATA_STR = ""
+UUID_DATA_STR = "" # usare - per separare i campi
+DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
 
 devices = []
@@ -73,11 +77,22 @@ class RPiBeacon:
     self.rssi = None
 
     def _init_(self, data, addr):
-        self.id = id
+        self.id, self.location = self._extractData(data)
         self.addr = addr
 
     def printData():
         print "%d - %s" % (self.id, self.location)
+
+    def _extractData(data):
+
+        for ch in ['-', "00"]:
+            data = data.replace(ch, '')
+
+        convStr = binascii.unhexlify(data)
+        splitData = convStr.split('-')
+
+        return splitData[0], splitData[1]
+
 
 #Appende i dispositivi trovati nella lista devices
 def scan_devices():
@@ -106,16 +121,32 @@ def lescan_devices():
     for dev in devices:
         dev.printData()
 
-def uuidStrToHex(uuid_str):
+def insertDash(string, pos):
 
-    
+    for x in pos:
+        string[:index] + '-' + string[index:]
+
+    return string
+
+def uuidStrToHex(uuid_str, pos):
+
+    convHex = binascii.hexlify(UUID_DATA_STR)
+
+    lenght = len(convHex)
+
+    if lenght > 32:
+        print "Error! Converted UUID is to long for standard"
+    elif lenght < 32:
+        convHex = convHex + ('0' * 32-lenght) 
+
+    uuid_hex = insertDash(convHex, pos)
 
     return uuid_hex    
 
 def piAdv():
 
     service = BeaconService()
-    service.start_advertising(uuidStrToHex(UUID_DATA_STR), 1, 1, 1, 200)
+    service.start_advertising(uuidStrToHex(UUID_DATA_STR, DASH_POS), 1, 1, 1, 200)
     time.sleep(15)
     service.stop_avertising()
 
@@ -137,7 +168,8 @@ def load_data(devices):
     cur = db.cursor()
 
     for dev in devices:
-        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %d, %s, %s)" % (dev.name, dev.addr, dev.rssi, dev.date, dev.time)) 
+        rpi_id = RPI_ID
+        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %s, %d, %s, %s)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time)) 
 
     db.commit()
     db.close

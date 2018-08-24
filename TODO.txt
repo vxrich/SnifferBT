@@ -11,9 +11,11 @@ X Funzione per caricare i dati nel database
 
 X Funzione per avviare advertisig RPi
 
+- Passare dati manufacturer a RPiBeacon
+
 - Beacon Scanner e lista RPiBeacon
 
-- Custom UUID data per inviare dati di riconoscimento
+X Custom UUID data per inviare dati di riconoscimento
 
 ----------------------------------------------------------------------
 Lista TODO 
