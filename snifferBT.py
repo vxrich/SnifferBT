@@ -32,8 +32,8 @@ PUBLIC_TARGET_ADDRESS = 0X17
 RANDOM_TARGET_ADDRESS = 0x18
 MANUFACTURER = 0xFF
 
-IS_BLE = True
-NOT_BLE = False
+IS_BLE = 1
+NOT_BLE = 0
 
 #Dati per la connessione con il DataBase
 HOST_NAME = "192.168.1.x"
@@ -175,7 +175,7 @@ def load_data(devices):
 
     for dev in devices:
         rpi_id = RPI_ID
-        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %s, %d, %s, %s)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time)) 
+        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
 
     db.commit()
     db.close
