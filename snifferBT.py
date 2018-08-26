@@ -13,6 +13,7 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 import datetime
 import os
 import binascii
+import time
 
 from bluetooth.ble import BeaconService
 from bluepy.btle import Scanner
@@ -23,11 +24,16 @@ RPI_ID = "rpi_1"
 
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi
+SLEEP_BETWEEN_SCAN = 300
 
+# Trovi questi parametri https://github.com/IanHarvey/bluepy/blob/master/bluepy/btle.py
 COMPLETE_NAME = 0X09 #ID nome nell'oggetto ScanEntry
 PUBLIC_TARGET_ADDRESS = 0X17
 RANDOM_TARGET_ADDRESS = 0x18
 MANUFACTURER = 0xFF
+
+IS_BLE = True
+NOT_BLE = False
 
 #Dati per la connessione con il DataBase
 HOST_NAME = "192.168.1.x"
@@ -38,28 +44,21 @@ DB_NAME = "devices_db"
 ADV_DATA = ""
 ADV_TIME = 15
 
-UUID_DATA_STR = "" # usare - per separare i campi
+UUID_DATA_STR = "rp1-salotto" # usare - per separare i campi
 DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
-
-devices = []
 
 """
 Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
 di un record nel database 
 """
 class ScanedDevice:
-    
-    self.addr = ""
-    self.name = ""
-    self.rssi = None
-    self.date = ""
-    self.time = ""
 
-    def _init_(self, name, addr, rssi):
+    def __init__(self, name, addr, rssi, isBle):
         self.name = name
         self.addr = addr
         self.rssi = rssi
+        self.isBle = isBle
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time())
 
@@ -71,14 +70,10 @@ in un'altra parte dell'ambiente
 """
 class RPiBeacon:
 
-    self.id = None
-    self.addr = ""
-    self.location = ""
-    self.rssi = None
-
-    def _init_(self, data, addr):
+    def __init__(self, data, addr, rssi):
         self.id, self.location = self._extractData(data)
         self.addr = addr
+        self.rssi = rssi
 
     def printData():
         print "%d - %s" % (self.id, self.location)
@@ -97,34 +92,41 @@ class RPiBeacon:
 #Appende i dispositivi trovati nella lista devices
 def scan_devices():
 
+    devices = []
+
     print "Start scanning devices ..."
     os.system("sudo hciconfig hci0 down")
     os.system("sudo hciconfig hci0 up")
     
     scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
 
-    devices.append(ScanedDevice(name, addr, None) for addr, name in scandevices.items())
+    devices.append(ScanedDevice(name, addr, None, NOT_BLE) for addr, name in scandevices.items())
     
-    for dev in scandevices:
-        dev.printData()
+    #for dev in scandevices:
+    #    dev.printData()
+
+    return devices 
 
 #Appende i dispositivi BLE trovati nella lista devices
 def lescan_devices():
 
+    devices = []
     print "Start scanning LE devices ..."
-
+    
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
     #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
-    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi) for dev in ledevices )
+    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, IS_BLE) for dev in ledevices )
 
-    for dev in devices:
-        dev.printData()
+    #for dev in devices:
+    #    dev.printData()
+
+    return devices
 
 def insertDash(string, pos):
 
     for x in pos:
-        string[:index] + '-' + string[index:]
+        string = string[:x] + '-' + string[x:]
 
     return string
 
@@ -132,14 +134,18 @@ def uuidStrToHex(uuid_str, pos):
 
     convHex = binascii.hexlify(UUID_DATA_STR)
 
-    lenght = len(convHex)
+    #print convHex
 
-    if lenght > 32:
+    length = len(convHex)
+
+    if length > 32:
         print "Error! Converted UUID is to long for standard"
-    elif lenght < 32:
-        convHex = convHex + ('0' * 32-lenght) 
+    elif length < 32:
+        convHex = convHex + "".join('0' for _ in range(32-len(convHex))) 
 
     uuid_hex = insertDash(convHex, pos)
+
+    #print uuid_hex
 
     return uuid_hex    
 
@@ -148,16 +154,16 @@ def piAdv():
     service = BeaconService()
     service.start_advertising(uuidStrToHex(UUID_DATA_STR, DASH_POS), 1, 1, 1, 200)
     time.sleep(15)
-    service.stop_avertising()
+    service.stop_advertising()
 
 def beaconScan():
 
     service = BeaconService()
     devices = service.scan(BEACON_SCAN_TIME)
 
-    for address, data in list(devices.items()):
-        b = RPiBeacon(data, address)
-        print(b)
+    beacons = [ RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi) for dev in devices]
+
+    return beacons
 
 def load_data(devices):
 
@@ -176,13 +182,22 @@ def load_data(devices):
 
 lescanner = Scanner()
 
+#if __init__ == "__main__":
+
 while True:
 
-    piAdv()
-    scan_devices()
-    lescan_devices()
+    devices = []
+    beacons = []
 
-    load_data()
+    piAdv()
+
+    beacons = beaconScan()
+
+    devices = scan_devices() + lescan_devices()
+
+    load_data(devices)
+
+    time.sleep(SLEEP_BETWEEN_SCAN)
     
 
 

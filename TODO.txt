@@ -11,11 +11,23 @@ X Funzione per caricare i dati nel database
 
 X Funzione per avviare advertisig RPi
 
-- Passare dati manufacturer a RPiBeacon
+X Passare dati manufacturer a RPiBeacon
 
-- Beacon Scanner e lista RPiBeacon
+X Beacon Scanner e lista RPiBeacon
 
 X Custom UUID data per inviare dati di riconoscimento
+
+- Inserire servizi e se è ble o meno nei record del database
+
+X Passare rssi a RPiBeacon
+
+- Spostare tutti i parametri in un file separato (anche di più in base al tipo?)
+
+- Refactoring spostando le classi in un file a parte (?)
+
+
+
+- EXTREME DUBUGGING!!!!!
 
 ----------------------------------------------------------------------
 Lista TODO 
