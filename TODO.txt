@@ -21,6 +21,8 @@ X Custom UUID data per inviare dati di riconoscimento
 
 X Passare rssi a RPiBeacon
 
+
+
 - Spostare tutti i parametri in un file separato (anche di più in base al tipo?)
 
 - Refactoring spostando le classi in un file a parte (?)

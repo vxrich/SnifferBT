@@ -178,7 +178,7 @@ def load_data(devices):
         cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
 
     db.commit()
-    db.close
+    db.close()
 
 lescanner = Scanner()
 
