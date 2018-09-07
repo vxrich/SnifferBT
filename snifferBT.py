@@ -168,7 +168,7 @@ def beaconScan():
 def load_data(devices):
 
     date = str(datetime.datetime.now().date())
-    time = str(datetime.datetie.now().time())
+    time = str(datetime.datetime.now().time())
     
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME)
     cur = db.cursor()
