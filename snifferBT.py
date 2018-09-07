@@ -100,7 +100,7 @@ def scan_devices():
     
     scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
 
-    devices.append(ScanedDevice(name, addr, None, NOT_BLE) for addr, name in scandevices.items())
+    devices.append((ScanedDevice(name, addr, None, NOT_BLE) for addr, name in scandevice.items()) for scandevice in scandevices)
     
     #for dev in scandevices:
     #    dev.printData()

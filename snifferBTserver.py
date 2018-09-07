@@ -17,6 +17,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'nome'@'localhost';
 import datetime
 import os
 import MySQLdb
+import time
 
 # C'è da creare un user mysql prima di avviare il programma oppure lo si crea direttamente
 # da qui dentro connettendosi da root
@@ -49,10 +50,11 @@ while True:
 
     print "--------------------------"
 
-    cur.execute("SELECT * FROM devices_db")
+    cur.execute("SELECT * FROM devices")
     rows = cur.fetchall()
 
     for row in rows:
         print row
 
+    time.sleep(30)
 db.commit()
