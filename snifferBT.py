@@ -36,9 +36,9 @@ IS_BLE = 1
 NOT_BLE = 0
 
 #Dati per la connessione con il DataBase
-HOST_NAME = "192.168.1.x"
+HOST_NAME = "192.168.1.15"
 ID = "rpi_1"
-PSW = ""
+PSW = "password_1"
 DB_NAME = "devices_db"
 
 ADV_DATA = ""
@@ -189,9 +189,9 @@ while True:
     devices = []
     beacons = []
 
-    piAdv()
+    #piAdv()
 
-    beacons = beaconScan()
+    #beacons = beaconScan()
 
     devices = scan_devices() + lescan_devices()
 

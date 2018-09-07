@@ -45,4 +45,14 @@ cur.execute(CREATE_TABLE)
 for user in rpi_users:
     cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
 
+while True:
+
+    print "--------------------------"
+
+    cur.execute("SELECT * FROM devices_db")
+    rows = cur.fetchall()
+
+    for row in rows:
+        print row
+
 db.commit()
