@@ -43,6 +43,6 @@ cur.execute(USE_DB)
 cur.execute(CREATE_TABLE)
 
 for user in rpi_users:
-    cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFED BY '%s'" % (user[0], user[1], user[2]))
+    cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
 
 db.commit()
