@@ -27,14 +27,15 @@ PSW = "asusx205ta"
 DB_NAME = "devices_db"
 
 rpi_users = [
-    ("rpi_1", "192.168.1.2", "password_1"),
-    ("rpi_2", "192.168.1.3", "password_2")
+    ("rpi_1", "192.168.1.1", "password_1"),
+    ("rpi_2", "192.168.1.3", "password_2"),
+    ("rpi_3", "192.168.1.15", "password_1")
 ]
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
 CREATE_TABLE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(12), is_ble tinyint(1))"
-
+GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
 db = MySQLdb.connect(HOST_NAME, ID, PSW)
 cur = db.cursor()
@@ -45,6 +46,9 @@ cur.execute(CREATE_TABLE)
 
 for user in rpi_users:
     cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+    cur.execute("GRANT ALL PRIVILEGES ON *.* TO '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+
+cur.execute("FLUSH PRIVILEGES;")
 
 while True:
 

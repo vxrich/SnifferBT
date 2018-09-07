@@ -37,7 +37,8 @@ NOT_BLE = 0
 
 #Dati per la connessione con il DataBase
 HOST_NAME = "192.168.1.15"
-ID = "rpi_1"
+PORT = 3306
+ID = "rpi_3"
 PSW = "password_1"
 DB_NAME = "devices_db"
 
@@ -170,7 +171,7 @@ def load_data(devices):
     date = str(datetime.datetime.now().date())
     time = str(datetime.datetime.now().time())
     
-    db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME)
+    db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
 
     for dev in devices:
