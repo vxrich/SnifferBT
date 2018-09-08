@@ -176,7 +176,7 @@ def load_data(devices):
 
     for dev in devices:
         rpi_id = RPI_ID
-        cur.execute("INSERT INTO devices(name, addr, rssi, date, time) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
+        cur.execute("INSERT INTO devices(rpi_id, name, addr, rssi, date, time, is_ble) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
 
     db.commit()
     db.close()
@@ -195,7 +195,7 @@ while True:
     #beacons = beaconScan()
 
     devices = scan_devices() + lescan_devices()
-
+    
     load_data(devices)
 
     time.sleep(SLEEP_BETWEEN_SCAN)

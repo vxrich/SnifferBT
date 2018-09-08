@@ -37,6 +37,7 @@ USE_DB = "USE devices_db"
 CREATE_TABLE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(12), is_ble tinyint(1))"
 GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
+os.system("sudo service mysql restart")
 db = MySQLdb.connect(HOST_NAME, ID, PSW)
 cur = db.cursor()
 
