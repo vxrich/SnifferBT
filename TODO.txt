@@ -21,6 +21,11 @@ X Custom UUID data per inviare dati di riconoscimento
 
 X Passare rssi a RPiBeacon
 
+- Correggere AttributeError: 'generator' object has no attribute 'name'
+    Sembra che l'errore sia dovuto al modo in cui sono implementati i loop
+    bisogna farli su più righe
+
+
 
 
 - Spostare tutti i parametri in un file separato (anche di più in base al tipo?)

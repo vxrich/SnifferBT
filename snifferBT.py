@@ -63,7 +63,7 @@ class ScanedDevice:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time())
 
-    def printData():
+    def printData(self):
         print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
 """
 Classe che crea un oggetto Beacon, in particolare un altro RPi che effettua la scansione 
@@ -101,10 +101,9 @@ def scan_devices():
     
     scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
 
-    devices.append((ScanedDevice(name, addr, None, NOT_BLE) for addr, name in scandevice.items()) for scandevice in scandevices)
-    
-    #for dev in scandevices:
-    #    dev.printData()
+    for scandevice in scandevices:
+        for name, addr in scandevice.items():
+            devices.append(ScanedDevice(name, addr, None, NOT_BLE))
 
     return devices 
 
@@ -116,13 +115,27 @@ def lescan_devices():
     
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
-    #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
-    devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, IS_BLE) for dev in ledevices )
 
-    #for dev in devices:
-    #    dev.printData()
+    #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
+    #devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, IS_BLE) for dev in ledevices )
+
+    for ledev in ledevices:
+        devices.append(ScanedDevice(ledev.getValueText(COMPLETE_NAME), ledev.addr, ledev.rssi, IS_BLE))
 
     return devices
+
+#Permette di identificare gli altri RPi Sniffer
+def beaconScan():
+
+    beacons = []
+
+    service = BeaconService()
+    devices = service.scan(BEACON_SCAN_TIME)
+
+    for dev in devices:
+        beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
+
+    return beacons
 
 def insertDash(string, pos):
 
@@ -150,6 +163,7 @@ def uuidStrToHex(uuid_str, pos):
 
     return uuid_hex    
 
+#Funzione per permettere al RPi di essere identificato dagli altri sniffer
 def piAdv():
 
     service = BeaconService()
@@ -157,15 +171,7 @@ def piAdv():
     time.sleep(15)
     service.stop_advertising()
 
-def beaconScan():
-
-    service = BeaconService()
-    devices = service.scan(BEACON_SCAN_TIME)
-
-    beacons = [ RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi) for dev in devices]
-
-    return beacons
-
+#Funzione per il caricamento dei dispositivi trovati nel database gestito da snifferBTserver.py
 def load_data(devices):
 
     date = str(datetime.datetime.now().date())
@@ -179,7 +185,10 @@ def load_data(devices):
         cur.execute("INSERT INTO devices(rpi_id, name, addr, rssi, date, time, is_ble) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
 
     db.commit()
+
     db.close()
+
+    print "Loaded Data!"
 
 lescanner = Scanner()
 
@@ -195,7 +204,10 @@ while True:
     #beacons = beaconScan()
 
     devices = scan_devices() + lescan_devices()
-    
+
+    for dev in devices:
+        dev.printData()
+
     load_data(devices)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
