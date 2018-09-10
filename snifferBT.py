@@ -61,10 +61,11 @@ class ScanedDevice:
         self.rssi = rssi
         self.isBle = isBle
         self.date = str(datetime.datetime.now().date())
-        self.time = str(datetime.datetime.now().time())
+        self.time = str(datetime.datetime.now().time().replace(microsecond=0))
 
     def printData(self):
         print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
+
 """
 Classe che crea un oggetto Beacon, in particolare un altro RPi che effettua la scansione 
 in un'altra parte dell'ambiente
@@ -75,6 +76,8 @@ class RPiBeacon:
         self.id, self.location = self._extractData(data)
         self.addr = addr
         self.rssi = rssi
+        self.date = str(datetime.datetime.now().date())
+        self.time = str(datetime.datetime.now().time().replace(microsecond=0))
 
     def printData():
         print "%d - %s" % (self.id, self.location)
@@ -112,6 +115,8 @@ def lescan_devices():
 
     devices = []
     print "Start scanning LE devices ..."
+
+    lescanner = Scanner()
     
     #Lista di oggetti bluepy.btle.ScanEntry
     ledevices = lescanner.scan(SCAN_TIME)
@@ -163,7 +168,11 @@ def uuidStrToHex(uuid_str, pos):
 
     return uuid_hex    
 
-#Funzione per permettere al RPi di essere identificato dagli altri sniffer
+"""
+Funzione per permettere al RPi di essere identificato dagli altri sniffer, i dati di id, posizione
+ed eventuali sono salvati nel byte del manufacturer rispettando le divisione dei caratteri HEX.
+Una volta decodificati da HEX in STRING otteniamo i valori separati da un '-'
+"""
 def piAdv():
 
     service = BeaconService()
@@ -171,18 +180,23 @@ def piAdv():
     time.sleep(15)
     service.stop_advertising()
 
-#Funzione per il caricamento dei dispositivi trovati nel database gestito da snifferBTserver.py
-def load_data(devices):
-
-    date = str(datetime.datetime.now().date())
-    time = str(datetime.datetime.now().time())
+"""
+Funzione per il caricamento dei dispositivi trovati nel database gestito da snifferBTserver.py
+Permette anche l'aggiornamento dell'RSSI, data e orario dei record già esistenti.
+"""
+def load_devices(devices):
     
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
 
     for dev in devices:
         rpi_id = RPI_ID
-        cur.execute("INSERT INTO devices(rpi_id, name, addr, rssi, date, time, is_ble) VALUES(%s, %s, %s, %d, %s, %s, %d)" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
+        dev.printData()
+        try:
+            cur.execute("INSERT INTO rpi_beacons(rpi_id, name, addr, rssi, date, time, is_ble) VALUES('%s', '%s', '%s', '%d', '%s', '%s', '%d')" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
+        except MySQLdb.Error as e:
+            if e[0] == 1062:
+                cur.execute("UPDATE rpi_beacons SET rssi='%d', date='%s', time='%s';" % (dev.rssi, dev.date, dev.time) )
 
     db.commit()
 
@@ -190,7 +204,24 @@ def load_data(devices):
 
     print "Loaded Data!"
 
-lescanner = Scanner()
+def load_beacons(beacons):
+    
+    db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
+    cur = db.cursor()
+
+    for beacon in beacons:
+        beacon.printData()
+        try:
+            cur.execute("INSERT INTO devices(id, location, addr, rssi, date, time) VALUES('%s', '%s', '%s', '%d', '%s', '%s')" % (beacon.id, beacon.location, beacon.addr, beacon.rssi, beacon.date, beacon.time)) 
+        except MySQLdb.Error as e:
+            if e[0] == 1062:
+                cur.execute("UPDATE devices SET location='%s', rssi='%d', date='%s', time='%s';" % (beacon.location, beacon.rssi, beacon.date, beacon.time) )
+
+    db.commit()
+
+    db.close()
+
+    print "Loaded Data!"
 
 #if __init__ == "__main__":
 
@@ -205,10 +236,8 @@ while True:
 
     devices = scan_devices() + lescan_devices()
 
-    for dev in devices:
-        dev.printData()
-
-    load_data(devices)
+    load_devices(devices)
+    load_beacons(beacons)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
     

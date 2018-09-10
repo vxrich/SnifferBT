@@ -1,4 +1,4 @@
-Lista TODO snifferBT.py 
+Lista TODO snifferBT.py e snifferBTserver.py
 
 X Scansione dei dispositivi e creazione lista (funzione specifica) con:
     mac
@@ -17,30 +17,35 @@ X Beacon Scanner e lista RPiBeacon
 
 X Custom UUID data per inviare dati di riconoscimento
 
-- Inserire servizi e se è ble o meno nei record del database
+X Inserire servizi e se è ble o meno nei record del database
 
 X Passare rssi a RPiBeacon
 
-- Correggere AttributeError: 'generator' object has no attribute 'name'
+X Correggere AttributeError: 'generator' object has no attribute 'name'
     Sembra che l'errore sia dovuto al modo in cui sono implementati i loop
     bisogna farli su più righe
 
+X Aggiungere try/except nelle connessioni e esecuzione query database
+
+X Considerare PK composta da addr e rpi_id
+
+X Decidere dove salvare i RPiBeacon scansionati
+    Creare una nuova table di soli RPiBeacon
+
+X Creazione database sul RPi Server
+
+- Rendere visibili fra loro i RPi
+
+- Programma "Server" che analizza il database e ritorna una semplice analisi
 
 
+
+
+----------------------------------------------------------------------
+Lista TODO REFACTORING
 
 - Spostare tutti i parametri in un file separato (anche di più in base al tipo?)
 
 - Refactoring spostando le classi in un file a parte (?)
 
-
-
 - EXTREME DUBUGGING!!!!!
-
-----------------------------------------------------------------------
-Lista TODO 
-
-- Programma "Server" che analizza il database e ritorna una semplice analisi
-
-X Creazione database sul RPi Server
-
-- Rendere visibili fra loro i RPi

@@ -18,6 +18,11 @@ import datetime
 import os
 import MySQLdb
 import time
+import warnings
+
+#Permette di catturare nei try/except i warnings come se fossero errori in modo
+# da gestirli meglio
+warnings.filterwarnings('error', category=MySQLdb.Warning)
 
 # C'è da creare un user mysql prima di avviare il programma oppure lo si crea direttamente
 # da qui dentro connettendosi da root
@@ -34,32 +39,73 @@ rpi_users = [
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
-CREATE_TABLE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(12), is_ble tinyint(1))"
+CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), is_ble tinyint(1), PRIMARY KEY(rpi_id, addr))"
+CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacons (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
 GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
-os.system("sudo service mysql restart")
-db = MySQLdb.connect(HOST_NAME, ID, PSW)
-cur = db.cursor()
+def dbStartUp():
 
-cur.execute(CREATE_DB)
-cur.execute(USE_DB)
-cur.execute(CREATE_TABLE)
+    try:
+        db = MySQLdb.connect(HOST_NAME, ID, PSW)
+        cur = db.cursor()
 
-for user in rpi_users:
-    cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
-    cur.execute("GRANT ALL PRIVILEGES ON *.* TO '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+        cur.execute(CREATE_DB)
+        cur.execute(USE_DB)
+        cur.execute(CREATE_TABLE_DEVICE)
+        cur.execute(CREATE_TABLE_BEACON)
+    except MySQLdb.Warning:
+        print "Database is already working!"
 
-cur.execute("FLUSH PRIVILEGES;")
 
-while True:
+    for user in rpi_users:
+        try:
+            cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+        except MySQLdb.Warning:
+            print "User %s is already created!" % (user[0])    
+        cur.execute("GRANT ALL PRIVILEGES ON *.* TO '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+    
+    cur.execute("FLUSH PRIVILEGES;")
+
+    db.commit()
+    db.close()
+
+def printData():
+    db = MySQLdb.connect(HOST_NAME, ID, PSW)
+    cur = db.cursor()
+    
+    cur.execute(USE_DB)
 
     print "--------------------------"
-
+    
     cur.execute("SELECT * FROM devices")
     rows = cur.fetchall()
 
     for row in rows:
         print row
 
+    db.commit()
+    db.close()
+
+#Metodo che permette di stimare le persone nell'area scansionata
+def evaluationData():
+
+    db = MySQLdb.connect(HOST_NAME, ID, PSW)
+    cur = db.cursor()
+    
+    cur.execute(USE_DB)
+
+    n_ble_dev = cur.execute("SELECT COUNT(*) FROM devices WHERE is_ble = 1 GROUP BY addr;")
+    n_dev = cur.execute("SELECT COUNT(*) FROM devices WHERE is_ble = 0 GROUP BY addr;")
+    print n_ble_dev
+    print n_dev
+
+
+os.system("sudo service mysql restart")
+
+dbStartUp()
+
+while True:
+
+    printData()
+    evaluationData()
     time.sleep(30)
-db.commit()
