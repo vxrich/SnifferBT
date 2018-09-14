@@ -65,6 +65,7 @@ class ScanedDevice:
 
     def printData(self):
         print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
+        print "-----------------------------------------------"
 
 """
 Classe che crea un oggetto Beacon, in particolare un altro RPi che effettua la scansione 
@@ -81,6 +82,7 @@ class RPiBeacon:
 
     def printData():
         print "%d - %s" % (self.id, self.location)
+        print "-----------------------------------------------"
 
     def _extractData(data):
 
@@ -108,6 +110,9 @@ def scan_devices():
         for name, addr in scandevice.items():
             devices.append(ScanedDevice(name, addr, None, NOT_BLE))
 
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
     return devices 
 
 #Appende i dispositivi BLE trovati nella lista devices
@@ -127,6 +132,9 @@ def lescan_devices():
     for ledev in ledevices:
         devices.append(ScanedDevice(ledev.getValueText(COMPLETE_NAME), ledev.addr, ledev.rssi, IS_BLE))
 
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
     return devices
 
 #Permette di identificare gli altri RPi Sniffer
@@ -134,11 +142,17 @@ def beaconScan():
 
     beacons = []
 
+    print "Scanning for other RPi .."
+
     service = BeaconService()
     devices = service.scan(BEACON_SCAN_TIME)
 
     for dev in devices:
         beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
+
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
 
     return beacons
 
@@ -175,16 +189,21 @@ Una volta decodificati da HEX in STRING otteniamo i valori separati da un '-'
 """
 def piAdv():
 
+    print "Starting advertising .."
     service = BeaconService()
     service.start_advertising(uuidStrToHex(UUID_DATA_STR, DASH_POS), 1, 1, 1, 200)
     time.sleep(15)
     service.stop_advertising()
+    print "Advertising complete!"
+    print "-----------------------------------------------"
 
 """
 Funzione per il caricamento dei dispositivi trovati nel database gestito da snifferBTserver.py
 Permette anche l'aggiornamento dell'RSSI, data e orario dei record già esistenti.
 """
 def load_devices(devices):
+
+    print "Loading devices' data on database .."
     
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
@@ -203,8 +222,11 @@ def load_devices(devices):
     db.close()
 
     print "Loaded Data!"
+    print "-----------------------------------------------"
 
 def load_beacons(beacons):
+
+    print "Loading beacons' data on database .."
     
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
@@ -221,7 +243,8 @@ def load_beacons(beacons):
 
     db.close()
 
-    print "Loaded Data!"
+    print "Loading complete!"
+    print "-----------------------------------------------"
 
 #if __init__ == "__main__":
 
@@ -235,6 +258,9 @@ while True:
     #beacons = beaconScan()
 
     devices = scan_devices() + lescan_devices()
+
+    for dev in devices:
+        dev.printData()
 
     load_devices(devices)
     load_beacons(beacons)
