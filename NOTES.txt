@@ -7,7 +7,7 @@ MOTO 360 --> Non facile da trovare, sembra faccia advertising.
 CARDIO BELT POLAR --> Non si accende per ora.
 GALAXY A5 --> Probabilemente esegue lo scan non in BLE 
 
----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 
 // BluePy //
 Lavora bene con i dispositivi BLE, non trova il cellulare, ne il MOTO360.

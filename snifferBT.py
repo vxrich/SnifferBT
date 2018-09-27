@@ -22,6 +22,8 @@ import MySQLdb #Modulo interazione DB
 
 RPI_ID = "rpi_1"
 
+TAG = ["dev_found", "rssi", "name"]
+
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi
 SLEEP_BETWEEN_SCAN = 300
@@ -93,6 +95,29 @@ class RPiBeacon:
         splitData = convStr.split('-')
 
         return splitData[0], splitData[1]
+
+#Scan dei device con tool interni a linux
+def hciscan():
+
+    devices = []
+
+    print "Start scanning devices ..."
+    os.system("sudo hciconfig hci0 up")
+    devices = os.popen("btmgmt find").readlines()
+    
+    #Rimuovo le prime 2 righe generate e l'ultima, che sono generate da btmgmt
+    devices.pop(0)
+    devices.pop(0)
+    devices.pop()
+
+    #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
+    devices = [i+j for i,j in zip(devices[::2],devices[1::2])]
+
+    for dev in devices:
+        d = devices.split()
+    
+
+
 
 
 #Appende i dispositivi trovati nella lista devices
