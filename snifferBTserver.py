@@ -4,7 +4,7 @@ Sniffer Bluetooth server, crea il DB e gli users,
 
 Dati Database:
 Name = devices_db
-Table = devices(rpi_id, name, addr, rssi, date, time, is_ble)
+Table = devices(rpi_id, name, addr, rssi, date, time)
 
 Se all'avvio appare l'errore 2002 
 sudo service mysql restart
@@ -39,7 +39,7 @@ rpi_users = [
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
-CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), is_ble tinyint(1), PRIMARY KEY(rpi_id, addr))"
+CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
 CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacons (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
 GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 

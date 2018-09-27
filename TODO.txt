@@ -44,7 +44,11 @@ X Creazione database sul RPi Server
     Implementare ricerca dispositivi con il modulo linux btmgmt
     Bisogna selezionare i dati e catalogare i servizi per identificare il dispositivo, in modo
     da eliminare il campo isBLE
+    Trovare un modo per differenziare i dispositivi "primari" (smartphone) dai "secondari" 
+    (fitness tracker, smartwatch, ..)
 
+- Lo split in hciscan() non tiene conto dei nomi con gli spazi
+    Sistemato utilizzando join e splicer python    
 
 
 ----------------------------------------------------------------------

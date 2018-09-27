@@ -22,7 +22,7 @@ import MySQLdb #Modulo interazione DB
 
 RPI_ID = "rpi_1"
 
-TAG = ["dev_found", "rssi", "name"]
+TAG = ["name", "dev_found", "rssi"]
 
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi
@@ -57,11 +57,10 @@ di un record nel database
 """
 class ScanedDevice:
 
-    def __init__(self, name, addr, rssi, isBle):
+    def __init__(self, name, addr, rssi):
         self.name = name
         self.addr = addr
         self.rssi = rssi
-        self.isBle = isBle
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
 
@@ -100,24 +99,31 @@ class RPiBeacon:
 def hciscan():
 
     devices = []
+    scandevices = []
 
     print "Start scanning devices ..."
     os.system("sudo hciconfig hci0 up")
-    devices = os.popen("btmgmt find").readlines()
+    scandevices = os.popen("sudo btmgmt find").readlines()
     
     #Rimuovo le prime 2 righe generate e l'ultima, che sono generate da btmgmt
-    devices.pop(0)
-    devices.pop(0)
-    devices.pop()
+    scandevices.pop(0)
+    scandevices.pop(0)
+    scandevices.pop()
 
     #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
-    devices = [i+j for i,j in zip(devices[::2],devices[1::2])]
+    scandevices = scandevices[::2] #elimina la riga AD flags
+    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
 
-    for dev in devices:
-        d = devices.split()
+    for dev in scandevices:
+        d = scandevices.split()
+        try:
+            devices.append(ScanedDevice(' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])])) 
+        except ValueError:
+            print "Impossible to find name of %s. It might not be scanned." %(d[d.index("on")+1])  
+            print "Device deleted!"         
     
-
-
+    for dev in devices:
+        service = (os.popen('sdptool browse %s | grep "Service Name"', %(dev.addr)).readlines()).replace('Service Name:')
 
 
 #Appende i dispositivi trovati nella lista devices
