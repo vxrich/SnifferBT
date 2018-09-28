@@ -19,6 +19,7 @@ import os
 import MySQLdb
 import time
 import warnings
+from __future__ import division
 
 #Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
@@ -86,6 +87,16 @@ def printData():
     db.commit()
     db.close()
 
+def rssiToMeters(rssi):
+    
+    #RSSI = TxPower - 10 * n * lg(d)
+    #n = 2 (in free space)
+     
+    #d = 10 ^ ((TxPower - RSSI) / (10 * n))
+
+ 
+    return round(pow(10, (txPower - rssi) / (10 * 2)),2)
+
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
 
@@ -94,9 +105,7 @@ def evaluationData():
     
     cur.execute(USE_DB)
 
-    n_ble_dev = cur.execute("SELECT COUNT(*) FROM devices WHERE is_ble = 1 GROUP BY addr;")
-    n_dev = cur.execute("SELECT COUNT(*) FROM devices WHERE is_ble = 0 GROUP BY addr;")
-    print n_ble_dev
+    n_dev = cur.execute("SELECT COUNT(*) FROM devices GROUP BY addr;")
     print n_dev
 
 

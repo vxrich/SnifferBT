@@ -63,9 +63,15 @@ class ScanedDevice:
         self.rssi = rssi
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
+        self.services = []
+
+        def setServices(services):
+            self.services = services
 
     def printData(self):
         print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
+        for s in self.services:
+            print s
         print "-----------------------------------------------"
 
 """
@@ -122,9 +128,15 @@ def hciscan():
             print "Impossible to find name of %s. It might not be scanned." %(d[d.index("on")+1])  
             print "Device deleted!"         
     
+    #Per ogni dispositivo analizzo i servizi che offre e li salvo in una lista pulendoli da info non necessaries
     for dev in devices:
-        service = (os.popen('sdptool browse %s | grep "Service Name"', %(dev.addr)).readlines()).replace('Service Name:')
+        services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse %s | grep "Service Name"', %(dev.addr)).readlines())]
+        dev.setServices(services)
 
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
+    return devices
 
 #Appende i dispositivi trovati nella lista devices
 def scan_devices():
@@ -287,8 +299,16 @@ while True:
     #piAdv()
 
     #beacons = beaconScan()
+     
+    # devices = scan_devices() + lescan_devices()
+    i = 0
 
-    devices = scan_devices() + lescan_devices()
+    #Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
+    while not a and i < 2:
+        devices = hciscan()
+        time.sleep(10)
+        i += 1
+         
 
     for dev in devices:
         dev.printData()
