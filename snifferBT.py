@@ -18,7 +18,10 @@ import time
 from bluetooth.ble import BeaconService
 from bluepy.btle import Scanner
 from bluetooth import bluez
-import MySQLdb #Modulo interazione DB 
+import MySQLdb #Modulo interazione DB
+import cPickle as pickle
+
+from Device import ScanedDevice, RPiBeacon
 
 RPI_ID = "rpi_1"
 
@@ -51,56 +54,6 @@ UUID_DATA_STR = "rp1-salotto" # usare - per separare i campi
 DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
 
-"""
-Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
-di un record nel database 
-"""
-class ScanedDevice:
-
-    def __init__(self, name, addr, rssi):
-        self.name = name
-        self.addr = addr
-        self.rssi = rssi
-        self.date = str(datetime.datetime.now().date())
-        self.time = str(datetime.datetime.now().time().replace(microsecond=0))
-        self.services = []
-
-        def setServices(services):
-            self.services = services
-
-    def printData(self):
-        print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.rssi, self.date, self.time)
-        for s in self.services:
-            print s
-        print "-----------------------------------------------"
-
-"""
-Classe che crea un oggetto Beacon, in particolare un altro RPi che effettua la scansione 
-in un'altra parte dell'ambiente
-"""
-class RPiBeacon:
-
-    def __init__(self, data, addr, rssi):
-        self.id, self.location = self._extractData(data)
-        self.addr = addr
-        self.rssi = rssi
-        self.date = str(datetime.datetime.now().date())
-        self.time = str(datetime.datetime.now().time().replace(microsecond=0))
-
-    def printData():
-        print "%d - %s" % (self.id, self.location)
-        print "-----------------------------------------------"
-
-    def _extractData(data):
-
-        for ch in ['-', "00"]:
-            data = data.replace(ch, '')
-
-        convStr = binascii.unhexlify(data)
-        splitData = convStr.split('-')
-
-        return splitData[0], splitData[1]
-
 #Scan dei device con tool interni a linux
 def hciscan():
 
@@ -123,7 +76,7 @@ def hciscan():
     for dev in scandevices:
         d = scandevices.split()
         try:
-            devices.append(ScanedDevice(' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])])) 
+            devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
         except ValueError:
             print "Impossible to find name of %s. It might not be scanned." %(d[d.index("on")+1])  
             print "Device deleted!"         
@@ -252,10 +205,9 @@ def load_devices(devices):
     cur = db.cursor()
 
     for dev in devices:
-        rpi_id = RPI_ID
         dev.printData()
         try:
-            cur.execute("INSERT INTO rpi_beacons(rpi_id, name, addr, rssi, date, time, is_ble) VALUES('%s', '%s', '%s', '%d', '%s', '%s', '%d')" % (rpi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
+            cur.execute("INSERT INTO rpi_beacons(rpi_id, name, addr, rssi, date, time, is_ble) VALUES('%s', '%s', '%s', '%d', '%s', '%s', '%d')" % (dev.pi_id, dev.name, dev.addr, dev.rssi, dev.date, dev.time, dev.isBle)) 
         except MySQLdb.Error as e:
             if e[0] == 1062:
                 cur.execute("UPDATE rpi_beacons SET rssi='%d', date='%s', time='%s';" % (dev.rssi, dev.date, dev.time) )
@@ -265,6 +217,30 @@ def load_devices(devices):
     db.close()
 
     print "Loaded Data!"
+    print "-----------------------------------------------"
+
+#Funzione per caricare oggetti nel DB serializzandoli con Pickle
+def load_devices_obj(devices):
+
+    serialized_devices =[ pickle.dumps(dev) for dev in devices]
+
+    print "Loading devices' data on database .."
+    
+    db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
+    cur = db.cursor()
+
+    for dev in serialized_devices:
+        try:
+            cur.execute("INSERT INTO rpi_beacons(serialized_devices) VALUES('%s')" % (dev)) 
+        except MySQLdb.Error as e:
+            
+
+
+    db.commit()
+
+    db.close()
+
+    print "Loaded Serialized Object!"
     print "-----------------------------------------------"
 
 def load_beacons(beacons):

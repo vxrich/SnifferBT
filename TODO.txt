@@ -40,14 +40,14 @@ X Creazione database sul RPi Server
     Si può usare l'RSSI per triangolare i dati e capire se un smartphone è vicino
     ad un dispositivo secondario e determinare se sono della stessa persona
 
-- IMPORTANTE!!!!!!!!
+X IMPORTANTE!!!!!!!!
     Implementare ricerca dispositivi con il modulo linux btmgmt
     Bisogna selezionare i dati e catalogare i servizi per identificare il dispositivo, in modo
     da eliminare il campo isBLE
     Trovare un modo per differenziare i dispositivi "primari" (smartphone) dai "secondari" 
     (fitness tracker, smartwatch, ..)
 
-- Lo split in hciscan() non tiene conto dei nomi con gli spazi
+X Lo split in hciscan() non tiene conto dei nomi con gli spazi
     Sistemato utilizzando join e splicer python    
 
 
@@ -56,6 +56,6 @@ Lista TODO REFACTORING
 
 - Spostare tutti i parametri in un file separato (anche di più in base al tipo?)
 
-- Refactoring spostando le classi in un file a parte (?)
+X Refactoring spostando le classi in un file a parte (?)
 
 - EXTREME DUBUGGING!!!!!

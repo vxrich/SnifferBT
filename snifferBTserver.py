@@ -14,12 +14,16 @@ CREATE USER 'nome'@'localhost' IDENTIFIED BY 'nome';
 GRANT ALL PRIVILEGES ON *.* TO 'nome'@'localhost';
 """
 
+from bluetooth.ble import BeaconService
+
 import datetime
 import os
 import MySQLdb
 import time
 import warnings
 from __future__ import division
+
+from Device import ScanedDevice, RPiBeacon
 
 #Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
@@ -37,6 +41,8 @@ rpi_users = [
     ("rpi_2", "192.168.1.3", "password_2"),
     ("rpi_3", "192.168.1.15", "password_1")
 ]
+
+rpi_beacons =[]
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
@@ -87,26 +93,51 @@ def printData():
     db.commit()
     db.close()
 
-def rssiToMeters(rssi):
-    
-    #RSSI = TxPower - 10 * n * lg(d)
-    #n = 2 (in free space)
-     
-    #d = 10 ^ ((TxPower - RSSI) / (10 * n))
+"""
+Permette di identificare gli altri RPi Sniffer, in modo da costruire i riferimenti per
+triangolare i devie scansionati.
+"""
+def beaconScan():
 
- 
-    return round(pow(10, (txPower - rssi) / (10 * 2)),2)
+    beacons = []
+
+    print "Scanning for other RPi .."
+
+    service = BeaconService()
+    devices = service.scan(BEACON_SCAN_TIME)
+
+    for dev in devices:
+        beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
+
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
+
+    return beacons
+
+def deserialize_devices(devices):
+
+    return [ pickle.loads(dev) for dev in devices ]
+
 
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
+
+    devices = []
 
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
     
     cur.execute(USE_DB)
 
-    n_dev = cur.execute("SELECT COUNT(*) FROM devices GROUP BY addr;")
-    print n_dev
+    cur.execute("SELECT * FROM devices;")
+
+    while True:
+
+
+
+        if not dev:
+            break
 
 
 os.system("sudo service mysql restart")
@@ -115,6 +146,7 @@ dbStartUp()
 
 while True:
 
+    rpi_beacons = beaconScan()
     printData()
     evaluationData()
     time.sleep(30)
