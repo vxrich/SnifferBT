@@ -27,6 +27,7 @@ class ScanedDevice:
      
     #d = 10 ^ ((TxPower - RSSI) / (10 * n))
 
+    def set
  
         return round(pow(10, (txPower - rssi) / (10 * 2)),2)
 
