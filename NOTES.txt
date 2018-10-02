@@ -37,3 +37,14 @@ Rileva tutti i dispositivi che fanno advertising in modalità slave (smartband, 
 
 BluePy per i dispositivi BLE con advertising e Bluez per i dispositivi non BLE o comunque che non 
 lo usano di default (Smartphone)
+
+1/10/2018
+Lo scan dei dispositivi viene effettuato con i tool integrati in linux:
+btmgmt --> Per trovare i dispositivi
+sdptool --> Per identificare i servizi che offrono
+Questi tool sono più efficaci delle librerie Bluetooth per Python.
+
+I dati vengono caricati in un DB sottoforma di oggetti serializzati in modo che possano essere 
+scaricati dal programma "server" che li scarica e li converte in oggetti tramite il modulo cPickle.
+Gli oggetti verrano poi analizzati sfruttando i dati degli RPiBeacon per effettuare una triangolazione
+e identificare il numero di persone nell'ambiente

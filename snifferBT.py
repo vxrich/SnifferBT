@@ -74,16 +74,16 @@ def hciscan():
     scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
 
     for dev in scandevices:
-        d = scandevices.split()
+        d = dev.split()
         try:
             devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
         except ValueError:
-            print "Impossible to find name of %s. It might not be scanned." %(d[d.index("on")+1])  
+            print "Impossible to find name of %s. It might not be scanned."   
             print "Device deleted!"         
     
     #Per ogni dispositivo analizzo i servizi che offre e li salvo in una lista pulendoli da info non necessaries
     for dev in devices:
-        services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse %s | grep "Service Name"', %(dev.addr)).readlines())]
+        services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse ' +dev.addr+ ' | grep "Service Name"').readlines())]
         dev.setServices(services)
 
     print "Scan completed!"
@@ -231,8 +231,9 @@ def load_devices_obj(devices):
 
     for dev in serialized_devices:
         try:
-            cur.execute("INSERT INTO rpi_beacons(serialized_devices) VALUES('%s')" % (dev)) 
+            cur.execute("INSERT INTO serial_dev(obj) VALUES('%s')" % (dev)) 
         except MySQLdb.Error as e:
+            print e
             
 
 
@@ -280,7 +281,7 @@ while True:
     i = 0
 
     #Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
-    while not a and i < 2:
+    while not devices and i < 2:
         devices = hciscan()
         time.sleep(10)
         i += 1
@@ -289,8 +290,9 @@ while True:
     for dev in devices:
         dev.printData()
 
-    load_devices(devices)
-    load_beacons(beacons)
+    #load_devices(devices)
+    #load_beacons(beacons)
+    load_devices_obj(devices)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
     

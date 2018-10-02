@@ -13,7 +13,7 @@ In un nuovo ambiente è necessario creare gli USERS per loggarsi in mysql:
 CREATE USER 'nome'@'localhost' IDENTIFIED BY 'nome';
 GRANT ALL PRIVILEGES ON *.* TO 'nome'@'localhost';
 """
-
+from __future__ import division
 from bluetooth.ble import BeaconService
 
 import datetime
@@ -21,7 +21,7 @@ import os
 import MySQLdb
 import time
 import warnings
-from __future__ import division
+import cPickle as pickle
 
 from Device import ScanedDevice, RPiBeacon
 
@@ -46,23 +46,23 @@ rpi_beacons =[]
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
+CREATE_TABLE_SERIALIZE_OBJ = "CREATE TABLE IF NOT EXISTS serial_dev (obj varchar(500))"
 CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
 CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacons (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
 GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
+queries = [CREATE_DB, USE_DB, CREATE_TABLE_BEACON, CREATE_TABLE_DEVICE, CREATE_TABLE_SERIALIZE_OBJ]
+
 def dbStartUp():
+    
+    db = MySQLdb.connect(HOST_NAME, ID, PSW)
+    cur = db.cursor()
 
-    try:
-        db = MySQLdb.connect(HOST_NAME, ID, PSW)
-        cur = db.cursor()
-
-        cur.execute(CREATE_DB)
-        cur.execute(USE_DB)
-        cur.execute(CREATE_TABLE_DEVICE)
-        cur.execute(CREATE_TABLE_BEACON)
-    except MySQLdb.Warning:
-        print "Database is already working!"
-
+    for query in queries:
+        try:
+            cur.execute(query)
+        except MySQLdb.Warning:
+            print "Query already satisfied!"
 
     for user in rpi_users:
         try:
@@ -95,7 +95,7 @@ def printData():
 
 """
 Permette di identificare gli altri RPi Sniffer, in modo da costruire i riferimenti per
-triangolare i devie scansionati.
+triangolare i device scansionati.
 """
 def beaconScan():
 
@@ -146,7 +146,7 @@ dbStartUp()
 
 while True:
 
-    rpi_beacons = beaconScan()
-    printData()
-    evaluationData()
+    #rpi_beacons = beaconScan()
+    #printData()
+    #evaluationData()
     time.sleep(30)
