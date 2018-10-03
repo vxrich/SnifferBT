@@ -38,7 +38,10 @@ X Creazione database sul RPi Server
 
 - Programma "Server" che analizza il database e ritorna una semplice analisi
     Si può usare l'RSSI per triangolare i dati e capire se un smartphone è vicino
-    ad un dispositivo secondario e determinare se sono della stessa persona
+    ad un dispositivo secondario e determinare se sono della stessa persona.
+    Bisogna tenere conto della tridimensionalità per ottenere una precisione migliore.
+    Dovremo quindi considerare a che altezza è posto il dispositivo di scan per 
+    lavorare in 2D sulla proiezione della distanza sul piano.
 
 X IMPORTANTE!!!!!!!!
     Implementare ricerca dispositivi con il modulo linux btmgmt

@@ -54,6 +54,9 @@ UUID_DATA_STR = "rp1-salotto" # usare - per separare i campi
 DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
 
+INSERT_DEVICE = 'INSERT INTO serial_dev(device_obj) VALUES("%s")'
+INSERT_BEACON = 'INSERT INTO serial_beacon(beacon_obj) VALUES("%s");'
+
 #Scan dei device con tool interni a linux
 def hciscan():
 
@@ -220,9 +223,10 @@ def load_devices(devices):
     print "-----------------------------------------------"
 
 #Funzione per caricare oggetti nel DB serializzandoli con Pickle
-def load_devices_obj(devices):
+def load_obj(devices,beacons):
 
     serialized_devices =[ pickle.dumps(dev) for dev in devices]
+    serialized_beacons = [ pickle.dumps(beacon) for beacon in beacons]
 
     print "Loading devices' data on database .."
     
@@ -231,16 +235,19 @@ def load_devices_obj(devices):
 
     for dev in serialized_devices:
         try:
-            cur.execute("INSERT INTO serial_dev(obj) VALUES('%s')" % (dev)) 
+            cur.execute(INSERT_DEVICE % (dev)) 
         except MySQLdb.Error as e:
             print e
             
-
+    for beacon in serialized_beacons:
+        try:
+            cur.execute(INSERT_BEACON % (beacon)) 
+        except MySQLdb.Error as e:
+            print e
 
     db.commit()
-
     db.close()
-
+    
     print "Loaded Serialized Object!"
     print "-----------------------------------------------"
 
@@ -254,7 +261,7 @@ def load_beacons(beacons):
     for beacon in beacons:
         beacon.printData()
         try:
-            cur.execute("INSERT INTO devices(id, location, addr, rssi, date, time) VALUES('%s', '%s', '%s', '%d', '%s', '%s')" % (beacon.id, beacon.location, beacon.addr, beacon.rssi, beacon.date, beacon.time)) 
+            cur.execute("INSERT INTO devices(id, location, addr, rssi, date, time) VALUES('%s', '%s', '%s', '%d', '%s', '%s');" % (beacon.id, beacon.location, beacon.addr, beacon.rssi, beacon.date, beacon.time)) 
         except MySQLdb.Error as e:
             if e[0] == 1062:
                 cur.execute("UPDATE devices SET location='%s', rssi='%d', date='%s', time='%s';" % (beacon.location, beacon.rssi, beacon.date, beacon.time) )
@@ -292,7 +299,7 @@ while True:
 
     #load_devices(devices)
     #load_beacons(beacons)
-    load_devices_obj(devices)
+    load_devices_obj(devices, beacons)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
     

@@ -46,13 +46,24 @@ rpi_beacons =[]
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
-CREATE_TABLE_SERIALIZE_OBJ = "CREATE TABLE IF NOT EXISTS serial_dev (obj varchar(500))"
-CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS devices (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
-CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacons (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
+CREATE_TABLE_SERIALIZE_DEVICE = "CREATE TABLE IF NOT EXISTS serial_device (device_obj varchar(500))"
+CREATE_TABLE_SERIALIZE_BEACON = "CREATE TABLE IF NOT EXISTS serial_beacon (beacon_obj varchar(500))"
+CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS device (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
+CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacon (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
 GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
 queries = [CREATE_DB, USE_DB, CREATE_TABLE_BEACON, CREATE_TABLE_DEVICE, CREATE_TABLE_SERIALIZE_OBJ]
 
+"""
+dbStartUp()
+Permette di inizializzare il database con le strutture necessarie all'archiviazione dei dati ottenuti da snifferBT.py
+Le strutture che crea verificando che non siano già presenti sono:
+- DB
+- Table serial_dev --> Per lo store degli oggetti serializzati
+- Table devices --> Per lo store dei dati degli oggetti in versione non serializzata
+- Table rpi_beacons --> Per lo store dei dati degli altri snifferBT 
+Inoltre crea gli utenti definiti nella lista rpi_users e garantisce loro tutti i permessi sulla base di dati
+"""
 def dbStartUp():
     
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
@@ -117,27 +128,24 @@ def beaconScan():
 
 def deserialize_devices(devices):
 
-    return [ pickle.loads(dev) for dev in devices ]
+    return [ pickle.loads(dev[0]) for dev in devices ]
 
 
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
-
-    devices = []
 
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
     
     cur.execute(USE_DB)
 
-    cur.execute("SELECT * FROM devices;")
+    cur.execute("SELECT * FROM serial_dev;")
+    fetch = cur.fetchall()
+    devices = deserialize_devices(fetch)
 
-    while True:
-
-
-
-        if not dev:
-            break
+    cur.execute("SELECT * FROM serial_beacon;")
+    fetch = cur.fetchall()
+    beacons = deserialize_devices(fetch)
 
 
 os.system("sudo service mysql restart")

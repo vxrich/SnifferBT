@@ -49,10 +49,6 @@ class RPiBeacon:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
 
-    def printData():
-        print "%d - %s" % (self.id, self.location)
-        print "-----------------------------------------------"
-
     def _extractData(data):
 
         for ch in ['-', "00"]:
@@ -69,5 +65,10 @@ class RPiBeacon:
         #n = 2 (in free space)
      
         #d = 10 ^ ((TxPower - RSSI) / (10 * n))
-
+        txPower = -50
         return round(pow(10, (txPower - rssi) / (10 * 2)),2)
+
+    def printData():
+        print "%d - %s" % (self.id, self.location)
+        print "-----------------------------------------------"
+    
