@@ -1,4 +1,5 @@
 import datetime
+import binascii
 
 """
 Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
@@ -14,6 +15,8 @@ class ScanedDevice:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
         self.services = []
+        self.x = None
+        self.y = None
 
     def _rssiToMeters(self, rssi):
     
@@ -28,6 +31,9 @@ class ScanedDevice:
     def setServices(self, services):
         self.services = services
 
+    def setPosition(self, x,y):
+        self.x = x
+        self.y = y
     
 
     def printData(self):
@@ -45,11 +51,11 @@ class RPiBeacon:
     def __init__(self, data, addr, rssi):
         self.id, self.location = self._extractData(data)
         self.addr = addr
-        self.distance = _rssiToMeters(rssi)
+        self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
 
-    def _extractData(data):
+    def _extractData(self, data):
 
         for ch in ['-', "00"]:
             data = data.replace(ch, '')
@@ -59,7 +65,7 @@ class RPiBeacon:
 
         return splitData[0], splitData[1]
 
-    def _rssiToMeters(rssi):
+    def _rssiToMeters(self, rssi):
     
         #RSSI = TxPower - 10 * n * lg(d)
         #n = 2 (in free space)

@@ -12,7 +12,6 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 
 import datetime
 import os
-import binascii
 import time
 
 from bluetooth.ble import BeaconService
@@ -54,7 +53,7 @@ UUID_DATA_STR = "rp1-salotto" # usare - per separare i campi
 DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
 
-INSERT_DEVICE = 'INSERT INTO serial_dev(device_obj) VALUES("%s")'
+INSERT_DEVICE = 'INSERT INTO serial_device(device_obj) VALUES("%s")'
 INSERT_BEACON = 'INSERT INTO serial_beacon(beacon_obj) VALUES("%s");'
 
 #Scan dei device con tool interni a linux
@@ -222,7 +221,9 @@ def load_devices(devices):
     print "Loaded Data!"
     print "-----------------------------------------------"
 
-#Funzione per caricare oggetti nel DB serializzandoli con Pickle
+"""
+Funzione per caricare oggetti nel DB serializzandoli con Pickle
+"""
 def load_obj(devices,beacons):
 
     serialized_devices =[ pickle.dumps(dev) for dev in devices]
@@ -274,7 +275,7 @@ def load_beacons(beacons):
     print "-----------------------------------------------"
 
 #if __init__ == "__main__":
-
+"""
 while True:
 
     devices = []
@@ -299,10 +300,10 @@ while True:
 
     #load_devices(devices)
     #load_beacons(beacons)
-    load_devices_obj(devices, beacons)
+    load_obj(devices, beacons)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
-    
+"""
 
 
 

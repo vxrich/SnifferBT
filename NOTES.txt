@@ -7,6 +7,17 @@ MOTO 360 --> Non facile da trovare, sembra faccia advertising.
 CARDIO BELT POLAR --> Non si accende per ora.
 GALAXY A5 --> Probabilemente esegue lo scan non in BLE 
 
+devices.append(ScanedDevice("rpi_1", "test_1", "BB:BB:BB:BB:BB:BB", -30))
+devices.append(ScanedDevice("rpi_1", "test_2", "CC:CC:CC:CC:CC:CC", -36))
+devices.append(ScanedDevice("rpi_2", "test_2", "CC:CC:CC:CC:CC:CC", -50))
+devices.append(ScanedDevice("rpi_3", "test_2", "CC:CC:CC:CC:CC:CC", -87))
+devices.append(ScanedDevice("rpi_2", "test_3", "DD:DD:DD:DD:DD:DD", -20))
+
+beacons.append(RPiBeacon(binascii.hexlify("rpi_1-angolodx"),"11:11:11:11:11:11",-50))
+beacons.append(RPiBeacon(binascii.hexlify("rpi_2-angolosx"),"22:22:22:22:22:22",-32))
+beacons.append(RPiBeacon(binascii.hexlify("rpi_3-finestra"),"33:33:33:33:33:33",-67))
+
+
 --------------------------------------------------------------------------------------
 
 // BluePy //

@@ -25,7 +25,7 @@ import cPickle as pickle
 
 from Device import ScanedDevice, RPiBeacon
 
-#Permette di catturare nei try/except i warnings come se fossero errori in modo
+# Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
 warnings.filterwarnings('error', category=MySQLdb.Warning)
 
@@ -46,13 +46,15 @@ rpi_beacons =[]
 
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
+
 CREATE_TABLE_SERIALIZE_DEVICE = "CREATE TABLE IF NOT EXISTS serial_device (device_obj varchar(500))"
 CREATE_TABLE_SERIALIZE_BEACON = "CREATE TABLE IF NOT EXISTS serial_beacon (beacon_obj varchar(500))"
 CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS device (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
 CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacon (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
-GRANT = "GRANT PREVILEGES ON *.* TO '%s'"
 
-queries = [CREATE_DB, USE_DB, CREATE_TABLE_BEACON, CREATE_TABLE_DEVICE, CREATE_TABLE_SERIALIZE_OBJ]
+fromGRANT = "GRANT PREVILEGES ON *.* TO '%s'"
+
+queries = [CREATE_DB, USE_DB, CREATE_TABLE_BEACON, CREATE_TABLE_DEVICE, CREATE_TABLE_SERIALIZE_DEVICE, CREATE_TABLE_SERIALIZE_BEACON]
 
 """
 dbStartUp()
@@ -147,14 +149,17 @@ def evaluationData():
     fetch = cur.fetchall()
     beacons = deserialize_devices(fetch)
 
+    
+
 
 os.system("sudo service mysql restart")
 
 dbStartUp()
-
+"""
 while True:
 
     #rpi_beacons = beaconScan()
     #printData()
     #evaluationData()
     time.sleep(30)
+"""
