@@ -7,7 +7,7 @@ di un record nel database
 """
 class ScanedDevice:
     
-    def __init__(self,rpi_id, name, addr, rssi):
+    def __init__(self,rpi_id, name, addr, rssi, x = None, y = None):
         self.rpi_id = rpi_id
         self.name = name
         self.addr = addr
@@ -15,17 +15,18 @@ class ScanedDevice:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
         self.services = []
-        self.x = None
-        self.y = None
+        self.x = x
+        self.y = y
 
     def _rssiToMeters(self, rssi):
     
-    #RSSI = TxPower - 10 * n * lg(d)
-    #n = 2 (in free space)
-     
-    #d = 10 ^ ((TxPower - RSSI) / (10 * n))
-        txPower = -50
-        return round(pow(10, (txPower - rssi) / (10 * 2)),2)
+        #RSSI = TxPower - 10 * n * lg(d)
+        #n = 2 (in free space)
+        
+        #d = 10 ^ ((TxPower - RSSI) / (10 * n))
+        N = 2
+        txPower = -64
+        return round(pow(10, (txPower - rssi) / (10 * N)),2)
 
 
     def setServices(self, services):
@@ -48,12 +49,18 @@ in un'altra parte dell'ambiente
 """
 class RPiBeacon:
 
-    def __init__(self, data, addr, rssi):
-        self.id, self.location = self._extractData(data)
+    def __init__(self, data, addr, rssi, x = None, y = None):
+        self.rpi_id, self.location = self._extractData(data)
         self.addr = addr
         self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
+        self.x = x
+        self.y = y
+
+    def setPosition(self, x,y):
+        self.x = x
+        self.y = y
 
     def _extractData(self, data):
 
@@ -71,10 +78,12 @@ class RPiBeacon:
         #n = 2 (in free space)
      
         #d = 10 ^ ((TxPower - RSSI) / (10 * n))
-        txPower = -50
-        return round(pow(10, (txPower - rssi) / (10 * 2)),2)
+        N = 2
+        txPower = -64
+        return round(pow(10, (txPower - rssi) / (10 * N)),2)
+e
 
     def printData():
-        print "%d - %s" % (self.id, self.location)
+        print "%d - %s" % (self.rpi_id, self.location)
         print "-----------------------------------------------"
     

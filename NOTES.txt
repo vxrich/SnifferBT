@@ -1,6 +1,7 @@
 MAC ADDRESS GALAXY A5: 1C:23:2C:03:F7:04
 MAC ADDRESS ID107 HR: C1:91:34:83:0E:F0
 MAC ADDRESS webOS TV: 14:BB:6E:02:E2:79 (public) /7D:99:6A:39:EF:F8 (random)
+MAC ADDRESS YDY NRF M106: FB:D2:31:5A:FC:47
 
 ID107 HR --> Facile da trovare.
 MOTO 360 --> Non facile da trovare, sembra faccia advertising.
@@ -59,3 +60,7 @@ I dati vengono caricati in un DB sottoforma di oggetti serializzati in modo che 
 scaricati dal programma "server" che li scarica e li converte in oggetti tramite il modulo cPickle.
 Gli oggetti verrano poi analizzati sfruttando i dati degli RPiBeacon per effettuare una triangolazione
 e identificare il numero di persone nell'ambiente
+
+5/10/2018
+Localizzazione degli RPi_Beacon è implementabile:
+- Creare uno oggetto stanza e loclizarli con le coordinate x e y misurate a mano
