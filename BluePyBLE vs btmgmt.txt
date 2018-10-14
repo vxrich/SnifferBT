@@ -1,0 +1,52 @@
+sudo python Test/testBluePy.py
+[sudo] password for vxrich:
+Device 71:57:6e:f0:a2:51 (random), RSSI=-74 dB
+Device 3d:6a:22:a5:7a:36 (random), RSSI=-91 dB
+Device 61:00:11:cd:1b:5f (random), RSSI=-97 dB
+Device c7:b4:3a:e7:a1:a3 (random), RSSI=-77 dB
+  Complete Local Name = Amazfit Bip Watch
+Device 23:d9:95:c4:4d:4d (random), RSSI=-60 dB
+Device 67:17:6e:3a:30:8e (random), RSSI=-81 dB
+Device 7b:b3:4c:85:c8:45 (random), RSSI=-98 dB
+Device f5:5e:c5:4d:1e:1a (random), RSSI=-93 dB
+  Complete Local Name = IDTW213R
+Device 50:cb:7c:e0:bf:b7 (random), RSSI=-90 dB
+Device c6:d5:29:cd:33:36 (random), RSSI=-91 dB
+  Complete Local Name = iTrack
+Device 7d:da:31:1d:05:07 (random), RSSI=-83 dB
+Device 49:d9:ed:d5:2b:87 (random), RSSI=-80 dB
+Device 3e:d7:2d:ac:2b:f3 (random), RSSI=-40 dB
+
+hci0 dev_found: 3E:D7:2D:AC:2B:F3 type LE Random rssi -49 flags 0x0004
+eir_len 31
+
+hci0 dev_found: 23:D9:95:C4:4D:4D type LE Random rssi -61 flags 0x0004
+eir_len 31
+
+hci0 dev_found: 50:CB:7C:E0:BF:B7 type LE Random rssi -89 flags 0x0000
+eir_len 11
+
+hci0 dev_found: 3D:6A:22:A5:7A:36 type LE Random rssi -90 flags 0x0004
+eir_len 31
+
+hci0 dev_found: 71:57:6E:F0:A2:51 type LE Random rssi -78 flags 0x0000
+eir_len 14
+
+hci0 dev_found: 67:17:6E:3A:30:8E type LE Random rssi -75 flags 0x0000
+eir_len 14
+
+hci0 dev_found: C7:B4:3A:E7:A1:A3 type LE Random rssi -78 flags 0x0000
+name Amazfit Bip Watch
+
+hci0 dev_found: 49:D9:ED:D5:2B:87 type LE Random rssi -90 flags 0x0000
+eir_len 14
+
+hci0 dev_found: 7D:DA:31:1D:05:07 type LE Random rssi -88 flags 0x0000
+eir_len 14
+
+hci0 dev_found: 61:00:11:CD:1B:5F type LE Random rssi -97 flags 0x0000
+eir_len 14
+
+hci0 dev_found: F5:5E:C5:4D:1E:1A type LE Random rssi -93 flags 0x0000
+name IDTW213R
+

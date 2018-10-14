@@ -21,6 +21,17 @@ beacons.append(RPiBeacon(binascii.hexlify("rpi_3-finestra"),"33:33:33:33:33:33",
 
 --------------------------------------------------------------------------------------
 
+// btmgmt // 
+Modulo presente nel pacchetto bluez di linux, sono gli stessi comandi implementati da
+BluePy ma riesce a trovare anche gli smartphone.
+Fornisce anche RSSI e altri parametri
+
+// sdptool //
+Service Discovery Protocol, serve per rilevare i servizi che un dispositivo Bluetooth
+può fornire. 
+Ha problemi con smartband e activity tracker (Host is Down, come se rifiutassero lo scan)
+per gli smartphone sembra non avere problemi.
+
 // BluePy //
 Lavora bene con i dispositivi BLE, non trova il cellulare, ne il MOTO360.
 Fornisce tutti i dati richiesti dal progetto di tesi.
