@@ -23,6 +23,8 @@ import cPickle as pickle
 from Device import ScanedDevice, RPiBeacon
 
 RPI_ID = "rpi_1"
+#Sfruttiamo l'UUID per inviare nome-locale-posizionex-posizioney
+UUID_DATA_STR = "rp_1-salotto-x-y" # usare - per separare i campi
 
 TAG = ["name", "dev_found", "rssi"]
 
@@ -42,19 +44,24 @@ NOT_BLE = 0
 #Dati per la connessione con il DataBase
 HOST_NAME = "192.168.1.15"
 PORT = 3306
-ID = "rpi_3"
+ID = RPI_ID
 PSW = "password_1"
 DB_NAME = "devices_db"
 
 ADV_DATA = ""
 ADV_TIME = 15
 
-UUID_DATA_STR = "rp1-salotto" # usare - per separare i campi
 DASH_POS = [8, 13, 18, 23]
 BEACON_SCAN_TIME = 15
 
 INSERT_DEVICE = 'INSERT INTO serial_device(device_obj) VALUES("%s")'
 INSERT_BEACON = 'INSERT INTO serial_beacon(beacon_obj) VALUES("%s");'
+
+def getPassword():
+
+    PSW = getpass.getpass()
+    PSW_HASH = binascii.hexlify(PSW)
+
 
 #Scan dei device con tool interni a linux
 def hciscan():
@@ -87,48 +94,6 @@ def hciscan():
     for dev in devices:
         services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse ' +dev.addr+ ' | grep "Service Name"').readlines())]
         dev.setServices(services)
-
-    print "Scan completed!"
-    print "-----------------------------------------------"
-
-    return devices
-
-#Appende i dispositivi trovati nella lista devices
-def scan_devices():
-
-    devices = []
-
-    print "Start scanning devices ..."
-    os.system("sudo hciconfig hci0 down")
-    os.system("sudo hciconfig hci0 up")
-    
-    scandevices = bluez.discover_devices(duration=SCAN_TIME, flush_cache=True, lookup_names=True, device_id=0)
-
-    for scandevice in scandevices:
-        for name, addr in scandevice.items():
-            devices.append(ScanedDevice(name, addr, None, NOT_BLE))
-
-    print "Scan completed!"
-    print "-----------------------------------------------"
-
-    return devices 
-
-#Appende i dispositivi BLE trovati nella lista devices
-def lescan_devices():
-
-    devices = []
-    print "Start scanning LE devices ..."
-
-    lescanner = Scanner()
-    
-    #Lista di oggetti bluepy.btle.ScanEntry
-    ledevices = lescanner.scan(SCAN_TIME)
-
-    #clean_dev = [[dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi] for dev in ledevices]
-    #devices.append( ScanedDevice(dev.getValueText(COMPLETE_NAME), dev.addr, dev.rssi, IS_BLE) for dev in ledevices )
-
-    for ledev in ledevices:
-        devices.append(ScanedDevice(ledev.getValueText(COMPLETE_NAME), ledev.addr, ledev.rssi, IS_BLE))
 
     print "Scan completed!"
     print "-----------------------------------------------"
@@ -223,6 +188,7 @@ def load_devices(devices):
 
 """
 Funzione per caricare oggetti nel DB serializzandoli con Pickle
+Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, ognuno nella tabella corretta
 """
 def load_obj(devices,beacons):
 
@@ -252,6 +218,9 @@ def load_obj(devices,beacons):
     print "Loaded Serialized Object!"
     print "-----------------------------------------------"
 
+"""
+Funzione che carica sul DB nella tabella Rpi_beacon gli oggetti dei beacon scannerizzati
+"""
 def load_beacons(beacons):
 
     print "Loading beacons' data on database .."

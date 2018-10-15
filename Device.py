@@ -49,14 +49,12 @@ in un'altra parte dell'ambiente
 """
 class RPiBeacon:
 
-    def __init__(self, data, addr, rssi, x = None, y = None):
-        self.rpi_id, self.location = self._extractData(data)
+    def __init__(self, data, addr, rssi):
+        self.rpi_id, self.location, self.x, self.y = self._extractData(data)
         self.addr = addr
         self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
-        self.x = x
-        self.y = y
 
     def setPosition(self, x,y):
         self.x = x
@@ -70,7 +68,7 @@ class RPiBeacon:
         convStr = binascii.unhexlify(data)
         splitData = convStr.split('-')
 
-        return splitData[0], splitData[1]
+        return splitData[0], splitData[1], splitData[2], splitData[3]
 
     def _rssiToMeters(self, rssi):
     
@@ -81,7 +79,7 @@ class RPiBeacon:
         N = 2
         txPower = -64
         return round(pow(10, (txPower - rssi) / (10 * N)),2)
-e
+
 
     def printData():
         print "%d - %s" % (self.rpi_id, self.location)

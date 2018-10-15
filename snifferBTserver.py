@@ -133,6 +133,9 @@ def deserialize_devices(devices):
     return [ pickle.loads(dev[0]) for dev in devices ]
 
 
+def intersection(c1, c2):
+    
+
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
 
@@ -145,9 +148,10 @@ def evaluationData():
     fetch = cur.fetchall()
     devices = deserialize_devices(fetch)
 
-    cur.execute("SELECT * FROM serial_beacon;")
-    fetch = cur.fetchall()
-    beacons = deserialize_devices(fetch)
+    for dev in devices:
+        cur.execute("SELECT * FROM serial_beacon;")
+        fetch = cur.fetchall()
+        beacons = deserialize_devices(fetch)
 
     
 

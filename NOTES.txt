@@ -75,3 +75,6 @@ e identificare il numero di persone nell'ambiente
 5/10/2018
 Localizzazione degli RPi_Beacon è implementabile:
 - Creare uno oggetto stanza e loclizarli con le coordinate x e y misurate a mano
+
+15/10/2018
+
