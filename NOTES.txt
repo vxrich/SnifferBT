@@ -13,6 +13,7 @@ devices.append(ScanedDevice("rpi_1", "test_2", "CC:CC:CC:CC:CC:CC", -36))
 devices.append(ScanedDevice("rpi_2", "test_2", "CC:CC:CC:CC:CC:CC", -50))
 devices.append(ScanedDevice("rpi_3", "test_2", "CC:CC:CC:CC:CC:CC", -87))
 devices.append(ScanedDevice("rpi_2", "test_3", "DD:DD:DD:DD:DD:DD", -20))
+devices.append(ScanedDevice("rpi_3", "test_1", "BB:BB:BB:BB:BB:BB", -60))
 
 beacons.append(RPiBeacon(binascii.hexlify("rpi_1-angolodx"),"11:11:11:11:11:11",-50))
 beacons.append(RPiBeacon(binascii.hexlify("rpi_2-angolosx"),"22:22:22:22:22:22",-32))
@@ -74,7 +75,14 @@ e identificare il numero di persone nell'ambiente
 
 5/10/2018
 Localizzazione degli RPi_Beacon è implementabile:
-- Creare uno oggetto stanza e loclizarli con le coordinate x e y misurate a mano
+- Creare uno oggetto stanza e localizzarli con le coordinate x e y misurate a mano
 
-15/10/2018
-
+16/10/2018
+Implementazione triangolazione:
+- Ordino la lista dei dispositivi scansionati
+- Prendo tutti i dispositivi con lo stesso indirizzo
+- Creo le circonferenze relative ad ogni dispositivo sfruttando Point di python
+    Con i Point di python possono creare un cerchio e non una circonferenza, quindi nell'intersezione ottengo
+    anche i punti interni.
+    Anche facendo la sottrazione di due circonferenze concentriche ottengo una corona circolare la quale 
+    individua comunque più punti interni.

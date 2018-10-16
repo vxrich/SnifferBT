@@ -38,7 +38,7 @@ class ScanedDevice:
     
 
     def printData(self):
-        print "%s - %s - %d at %s - %s " % (self.name, self.addr, self.distance, self.date, self.time)
+        print "Scaned by %s --> %s - %s - %d at %s - %s " % (self.rpi_id, self.name, self.addr, self.distance, self.date, self.time)
         for s in self.services:
             print s
         print "-----------------------------------------------"
@@ -55,6 +55,7 @@ class RPiBeacon:
         self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
+        self.position = (self.x, self.y)
 
     def setPosition(self, x,y):
         self.x = x
@@ -68,7 +69,14 @@ class RPiBeacon:
         convStr = binascii.unhexlify(data)
         splitData = convStr.split('-')
 
-        return splitData[0], splitData[1], splitData[2], splitData[3]
+        id, location, x ,y = "", "", None, None
+
+        try:
+            id, location, x, y = splitData[0], splitData[1], splitData[2], splitData[3]
+        except IndexError:
+            print "UUID missing parts!"
+
+        return id, location, x, y
 
     def _rssiToMeters(self, rssi):
     

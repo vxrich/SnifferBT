@@ -22,6 +22,8 @@ import MySQLdb
 import time
 import warnings
 import cPickle as pickle
+from scipy.spatial.distance import euclidean as dist
+from itertools import combinations, groupby
 
 from Device import ScanedDevice, RPiBeacon
 
@@ -136,6 +138,7 @@ def deserialize_devices(devices):
 def intersection(c1, c2):
     
 
+
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
 
@@ -144,16 +147,36 @@ def evaluationData():
     
     cur.execute(USE_DB)
 
+    #Fetch dei device scansionati
     cur.execute("SELECT * FROM serial_dev;")
     fetch = cur.fetchall()
     devices = deserialize_devices(fetch)
+    devices.sort(key=lambda x: x.addr)
 
+    #Raggruppo i dispositivi per MAC address
+    groups = defaultdict(list)
     for dev in devices:
-        cur.execute("SELECT * FROM serial_beacon;")
-        fetch = cur.fetchall()
-        beacons = deserialize_devices(fetch)
+        groups[dev.addr].append(dev)
+    devices = groups.values()
 
-    
+    #Fetch dei RPiBeacon
+    cur.execute("SELECT * FROM serial_beacon;")
+    fetch = cur.fetchall()
+    beacons = deserialize_devices(fetch)
+
+    #Ciclo principale
+    for dev in devices:
+        if len(dev) < 3:
+            print "Device %s is not found by all the RPi Beacon"
+        else:
+            points = []
+            #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
+            dev_cp = list(combinations(dev, 2))
+            for a,b in dev_cp:
+                if dist(a.position,b.position) <= (abs(a.distance-b.distance)):
+                    point.append()
+                
+        
 
 
 os.system("sudo service mysql restart")
