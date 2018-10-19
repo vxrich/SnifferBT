@@ -15,9 +15,9 @@ devices.append(ScanedDevice("rpi_3", "test_2", "CC:CC:CC:CC:CC:CC", -87))
 devices.append(ScanedDevice("rpi_2", "test_3", "DD:DD:DD:DD:DD:DD", -20))
 devices.append(ScanedDevice("rpi_3", "test_1", "BB:BB:BB:BB:BB:BB", -60))
 
-beacons.append(RPiBeacon(binascii.hexlify("rpi_1-angolodx"),"11:11:11:11:11:11",-50))
-beacons.append(RPiBeacon(binascii.hexlify("rpi_2-angolosx"),"22:22:22:22:22:22",-32))
-beacons.append(RPiBeacon(binascii.hexlify("rpi_3-finestra"),"33:33:33:33:33:33",-67))
+beacons.append(RPiBeacon(binascii.hexlify("rpi_1-angolodx-0-0"),"11:11:11:11:11:11",-50))
+beacons.append(RPiBeacon(binascii.hexlify("rpi_2-angolosx-10-10"),"22:22:22:22:22:22",-32))
+beacons.append(RPiBeacon(binascii.hexlify("rpi_3-finestra-0-10"),"33:33:33:33:33:33",-67))
 
 
 --------------------------------------------------------------------------------------
@@ -86,3 +86,7 @@ Implementazione triangolazione:
     anche i punti interni.
     Anche facendo la sottrazione di due circonferenze concentriche ottengo una corona circolare la quale 
     individua comunque più punti interni.
+
+18/10/2018
+Il calcolo dei punti verrà fatto ogni 2 circonferenze, sfruttando i raggi e la formula del coseno, ottenuti
+gli angoli si calcolano le intersezioni tramite le coordinate polari.

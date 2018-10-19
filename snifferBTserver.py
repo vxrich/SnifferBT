@@ -24,8 +24,10 @@ import warnings
 import cPickle as pickle
 from scipy.spatial.distance import euclidean as dist
 from itertools import combinations, groupby
-
-from Device import ScanedDevice, RPiBeacon
+from collections import defaultdict
+from Device import ScanedDevice, RPiBeacon, Circle
+import numpy as np
+from numpy.linalg import solvenp
 
 # Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
@@ -134,10 +136,11 @@ def deserialize_devices(devices):
 
     return [ pickle.loads(dev[0]) for dev in devices ]
 
-
-def intersection(c1, c2):
+# Funzione che prende in input due circonferenze, identificate da centro e raggio
+# e ritorna i punti di intersezione
+# NECESSARIO IMPLEMENTAZIONE DEI NOMI CORRETTI
+def intersection(A, b):
     
-
 
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
@@ -153,30 +156,59 @@ def evaluationData():
     devices = deserialize_devices(fetch)
     devices.sort(key=lambda x: x.addr)
 
+    #Fetch dei RPiBeacon
+    cur.execute("SELECT * FROM serial_beacon;")
+    fetch = cur.fetchall()
+    beacons = deserialize_devices(fetch)
+
     #Raggruppo i dispositivi per MAC address
     groups = defaultdict(list)
     for dev in devices:
         groups[dev.addr].append(dev)
     devices = groups.values()
 
-    #Fetch dei RPiBeacon
-    cur.execute("SELECT * FROM serial_beacon;")
-    fetch = cur.fetchall()
-    beacons = deserialize_devices(fetch)
-
-    #Ciclo principale
+    
+    #I devices sono raggruppati per addr, quindi dev è una lista
     for dev in devices:
         if len(dev) < 3:
             print "Device %s is not found by all the RPi Beacon"
         else:
             points = []
             #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
-            dev_cp = list(combinations(dev, 2))
-            for a,b in dev_cp:
-                if dist(a.position,b.position) <= (abs(a.distance-b.distance)):
-                    point.append()
-                
-        
+            dev_cp = []
+            mat = []
+            for d in dev:
+                for b in beacons:
+                    if d.rpi_id == b.rpi_id:
+                        dev_cp.append((d,b)) 
+                        z = b.x**2 + b.y**2 - d.distance**2
+                        mat.append(np.array([[1,0,b.x],[0,1,b.y],[b.x,b.y,z]]))
+
+            mat_cp = combinations(mat,2)
+            lines = []
+            """
+            Prendo le combianzioni lineari delle matrici delle circonferenze e le sottraggo 
+            per ottenere le rette secanti i 2 punti di intersezione tra le coppie di circonferenze
+            con la matrice delle rette troverò il punto di intersezione di quest'ultime.
+            Questo metodo mi permette di trovare un punto anche con misurazioni imprecise
+            In questo modo è possibile intersecare anche solo 2 rette e si trova il punto 
+
+            Necessario implementare controllo sulla lunghezza dei raggi nel caso 2 circonferenze non si
+            toccano
+            """
+            for a,b in mat_cp:
+                mline = np.subtract(a,b)
+                mline[2][2]= mline[2][2]/2
+                lines.append(mline[2])
+
+            # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
+            # di numpy, prima però devo costruire la matrice A e b
+            A = np.array([(lines[0])[0:2], (lines[1])[2])
+            b = np.array([(lines[0])[2],(lines[1])[2])
+            # points conterrà elementi del tipo np.array
+            points.append(np.solve(A,b))
+
+
 
 
 os.system("sudo service mysql restart")

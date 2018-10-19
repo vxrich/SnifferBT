@@ -11,6 +11,7 @@ class ScanedDevice:
         self.rpi_id = rpi_id
         self.name = name
         self.addr = addr
+        #La distanza alla quale viene localizzato dal dispositivo specificati con rpi_id
         self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
@@ -52,9 +53,12 @@ class RPiBeacon:
     def __init__(self, data, addr, rssi):
         self.rpi_id, self.location, self.x, self.y = self._extractData(data)
         self.addr = addr
+        # Distanza alla quale viene indentificato, irrilevante se inseriamo le coordinate esatte di dove 
+        # verra posizionato
         self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
+        # Il centro del cerchio per la localizzazione del dispositivo viene abbinata alla ScanedDevice.distance
         self.position = (self.x, self.y)
 
     def setPosition(self, x,y):
