@@ -139,7 +139,7 @@ def deserialize_devices(devices):
 # Funzione che prende in input due circonferenze, identificate da centro e raggio
 # e ritorna i punti di intersezione
 # NECESSARIO IMPLEMENTAZIONE DEI NOMI CORRETTI
-def intersection(A, b):
+#def intersection(A, b):
     
 
 #Metodo che permette di stimare le persone nell'area scansionata
@@ -176,16 +176,16 @@ def evaluationData():
             points = []
             #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
             dev_cp = []
-            mat = []
+            vects = []
             for d in dev:
                 for b in beacons:
                     if d.rpi_id == b.rpi_id:
                         dev_cp.append((d,b)) 
                         z = b.x**2 + b.y**2 - d.distance**2
-                        mat.append(np.array([[1,0,b.x],[0,1,b.y],[b.x,b.y,z]]))
+                        vects.append(np.array([b.x,b.y,z])) # Calcolo solo la terza riga della matice perchè le altre non sevono
 
-            mat_cp = combinations(mat,2)
-            lines = []
+            vects_cp = combinations(mat,2)
+            lin_eqs = []
             """
             Prendo le combianzioni lineari delle matrici delle circonferenze e le sottraggo 
             per ottenere le rette secanti i 2 punti di intersezione tra le coppie di circonferenze
@@ -196,15 +196,17 @@ def evaluationData():
             Necessario implementare controllo sulla lunghezza dei raggi nel caso 2 circonferenze non si
             toccano
             """
-            for a,b in mat_cp:
-                mline = np.subtract(a,b)
-                mline[2][2]= mline[2][2]/2
-                lines.append(mline[2])
+            for a,b in vects_cp:
+                lin_eq = np.subtract(a,b)
+                lin_eq[2]= lin_eq[2]/2
+                lin_eqs.append(mline)
 
             # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
             # di numpy, prima però devo costruire la matrice A e b
-            A = np.array([(lines[0])[0:2], (lines[1])[2])
-            b = np.array([(lines[0])[2],(lines[1])[2])
+            # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
+            # delle altre sarà lo stesso punto
+            A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[2])
+            b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2])
             # points conterrà elementi del tipo np.array
             points.append(np.solve(A,b))
 
