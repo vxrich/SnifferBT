@@ -90,3 +90,9 @@ Implementazione triangolazione:
 18/10/2018
 Il calcolo dei punti verrà fatto ogni 2 circonferenze, sfruttando i raggi e la formula del coseno, ottenuti
 gli angoli si calcolano le intersezioni tramite le coordinate polari.
+
+6/12/2018
+I dispositivi, come le cuffie bluetooth, se sono connessi ad un master, uno smartphone, non vengono
+trovate ma lo smartphone viene comunque trovato dallo sniffer. Fatto positivo perchè non dobbiamo
+andare a trattare device in più perchè meglio avere lo scan degli smartphone perchè generalmente a uno
+smartphone corrisponde una persona.
