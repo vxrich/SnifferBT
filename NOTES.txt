@@ -96,3 +96,8 @@ I dispositivi, come le cuffie bluetooth, se sono connessi ad un master, uno smar
 trovate ma lo smartphone viene comunque trovato dallo sniffer. Fatto positivo perchè non dobbiamo
 andare a trattare device in più perchè meglio avere lo scan degli smartphone perchè generalmente a uno
 smartphone corrisponde una persona.
+
+7/12/2018
+I dispositivi come le smartband (Mi Band, Amazfit Bip Watch, ..) vengono rilevate ma non è possibile effettuare
+la ricerca dei servizi, è possibile, nel programma associarle ai dispositivi che non ci restituiscono nulla
+nella ricerca dei servizi e distinguerli per questa caratteristica.
