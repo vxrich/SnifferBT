@@ -27,16 +27,33 @@ devices = groups.values()
 
 cart_product = []
 
-print devices
-
+#I devices sono raggruppati per addr, quindi dev e' una lista
 for dev in devices:
-    cp = []
-    for d in dev:
-        print d.addr
-        for b in beacons:
-            if d.rpi_id == b.rpi_id:
-                cp.append((b.position, d.distance))
-    cart_product.append(cp)
+    if len(dev) < 3:
+        print "Device %s is not found by all the RPi Beacon"
+    else:
+        points = []
+        #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
+        dev_cp = []
+        
+        for d in dev:
+            vects = [] #Conterra' i dati di ogni circonferenza per un dato dispositivo
+            vects_cp=[]
+            for b in beacons:
+                if d.rpi_id == b.rpi_id:
+                    dev_cp.append((d,b)) 
+                    tn = b.x**2 + b.y**2 - d.distance**2 #Rappresenta il termine noto dell'equazione della circonferenza
+                    vects.append(np.array([b.x,b.y,tn])) # Calcolo solo la terza riga della matice perche' le altre non sevono
 
-for cp in cart_product:
-    print cp
+            vects_cp = combinations(vects,2)
+            lin_eqs = []
+        
+            for a,b in vects_cp:
+                lin_eq = np.subtract(a,b)
+                #lin_eq[2]= lin_eq[2]/2
+                lin_eqs.append(lin_eq)
+
+            A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[0:2]])
+            b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2])
+            
+            points.append(np.solve(A,b))

@@ -27,7 +27,7 @@ from itertools import combinations, groupby
 from collections import defaultdict
 from Device import ScanedDevice, RPiBeacon, Circle
 import numpy as np
-from numpy.linalg import solvenp
+from numpy.linalg import solve
 
 # Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
