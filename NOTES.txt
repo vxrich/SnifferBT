@@ -103,4 +103,4 @@ la ricerca dei servizi, è possibile, nel programma associarle ai dispositivi ch
 nella ricerca dei servizi e distinguerli per questa caratteristica.
 
 14/12/2018
-Controllo e verifica che il metodo di traingolazione trovi il punto corretto.
+Controllo e verifica che il metodo di triangolazione trovi il punto corretto.

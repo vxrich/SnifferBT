@@ -4,6 +4,8 @@ import binascii
 from scipy.spatial.distance import euclidean as dist
 from itertools import combinations, groupby, product
 from collections import defaultdict
+import numpy as np
+from numpy.linalg import solve
 
 devices = []
 beacons = []
@@ -28,32 +30,44 @@ devices = groups.values()
 cart_product = []
 
 #I devices sono raggruppati per addr, quindi dev e' una lista
-for dev in devices:
-    if len(dev) < 3:
-        print "Device %s is not found by all the RPi Beacon"
-    else:
-        points = []
-        #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
-        dev_cp = []
-        
-        for d in dev:
-            vects = [] #Conterra' i dati di ogni circonferenza per un dato dispositivo
-            vects_cp=[]
-            for b in beacons:
-                if d.rpi_id == b.rpi_id:
-                    dev_cp.append((d,b)) 
-                    tn = b.x**2 + b.y**2 - d.distance**2 #Rappresenta il termine noto dell'equazione della circonferenza
-                    vects.append(np.array([b.x,b.y,tn])) # Calcolo solo la terza riga della matice perche' le altre non sevono
+points = []
+#Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
+dev_cp = []
+vects = []
+for dev in devices: 
+    for d in dev:
+        for b in beacons:
+            if d.rpi_id == b.rpi_id:
+                dev_cp.append((d,b)) 
+                z = b.x**2 + b.y**2 - d.distance**2
+                vects.append(np.array([b.x*2,b.y*2,z])) # Calcolo solo la terza riga della matice perche' le altre non sevono
+                print vects
 
-            vects_cp = combinations(vects,2)
-            lin_eqs = []
-        
-            for a,b in vects_cp:
-                lin_eq = np.subtract(a,b)
-                #lin_eq[2]= lin_eq[2]/2
-                lin_eqs.append(lin_eq)
+        vects_cp = combinations(vects,2)
+        lin_eqs = []
+        """
+        Prendo le combianzioni lineari delle matrici delle circonferenze e le sottraggo 
+        per ottenere le rette secanti i 2 punti di intersezione tra le coppie di circonferenze
+        con la matrice delle rette trovero' il punto di intersezione di quest'ultime.
+        Questo metodo mi permette di trovare un punto anche con misurazioni imprecise
+        In questo modo e' possibile intersecare anche solo 2 rette e si trova il punto 
 
-            A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[0:2]])
-            b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2])
-            
-            points.append(np.solve(A,b))
+        Necessario implementare controllo sulla lunghezza dei raggi nel caso 2 circonferenze non si
+        toccano
+        """
+        for a,b in vects_cp:
+            lin_eq = np.subtract(a,b)
+            #lin_eq[2]= lin_eq[2]/2
+            lin_eqs.append(lin_eq)
+
+        # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
+        # di numpy, prima pero' devo costruire la matrice A e b
+        # Le matrici A e b sono riferite a solo 2 rette, perche per costruzione l'intersezione 
+        # delle altre sare lo stesso punto
+        print lin_eqs
+        A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[2]])
+        b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2]])
+        # points conterre' elementi del tipo np.array
+        points.append(np.solve(A,b))
+
+    print points

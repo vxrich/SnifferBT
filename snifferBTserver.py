@@ -182,33 +182,33 @@ def evaluationData():
                     if d.rpi_id == b.rpi_id:
                         dev_cp.append((d,b)) 
                         z = b.x**2 + b.y**2 - d.distance**2
-                        vects.append(np.array([b.x,b.y,z])) # Calcolo solo la terza riga della matice perchè le altre non sevono
+                        vects.append(np.array([b.x*2,b.y*2,z])) # Calcolo solo la terza riga della matice perchè le altre non sevono
 
-            vects_cp = combinations(mat,2)
-            lin_eqs = []
-            """
-            Prendo le combianzioni lineari delle matrici delle circonferenze e le sottraggo 
-            per ottenere le rette secanti i 2 punti di intersezione tra le coppie di circonferenze
-            con la matrice delle rette troverò il punto di intersezione di quest'ultime.
-            Questo metodo mi permette di trovare un punto anche con misurazioni imprecise
-            In questo modo è possibile intersecare anche solo 2 rette e si trova il punto 
+                vects_cp = combinations(mat,2)
+                lin_eqs = []
+                """
+                Prendo le combianzioni lineari delle matrici delle circonferenze e le sottraggo 
+                per ottenere le rette secanti i 2 punti di intersezione tra le coppie di circonferenze
+                con la matrice delle rette troverò il punto di intersezione di quest'ultime.
+                Questo metodo mi permette di trovare un punto anche con misurazioni imprecise
+                In questo modo è possibile intersecare anche solo 2 rette e si trova il punto 
 
-            Necessario implementare controllo sulla lunghezza dei raggi nel caso 2 circonferenze non si
-            toccano
-            """
-            for a,b in vects_cp:
-                lin_eq = np.subtract(a,b)
-                lin_eq[2]= lin_eq[2]/2
-                lin_eqs.append(mline)
+                Necessario implementare controllo sulla lunghezza dei raggi nel caso 2 circonferenze non si
+                toccano
+                """
+                for a,b in vects_cp:
+                    lin_eq = np.subtract(a,b)
+                    #lin_eq[2]= lin_eq[2]/2
+                    lin_eqs.append(lin_eq)
 
-            # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
-            # di numpy, prima però devo costruire la matrice A e b
-            # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
-            # delle altre sarà lo stesso punto
-            A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[2])
-            b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2])
-            # points conterrà elementi del tipo np.array
-            points.append(np.solve(A,b))
+                # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
+                # di numpy, prima però devo costruire la matrice A e b
+                # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
+                # delle altre sarà lo stesso punto
+                A = np.array([(lin_eqs[0])[0:2], (lin_eqs[1])[2])
+                b = np.array([(lin_eqs[0])[2],(lin_eqs[1])[2])
+                # points conterrà elementi del tipo np.array
+                points.append(np.solve(A,b))
 
 
 
