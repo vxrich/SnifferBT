@@ -101,3 +101,6 @@ smartphone corrisponde una persona.
 I dispositivi come le smartband (Mi Band, Amazfit Bip Watch, ..) vengono rilevate ma non è possibile effettuare
 la ricerca dei servizi, è possibile, nel programma associarle ai dispositivi che non ci restituiscono nulla
 nella ricerca dei servizi e distinguerli per questa caratteristica.
+
+14/12/2018
+Controllo e verifica che il metodo di traingolazione trovi il punto corretto.
