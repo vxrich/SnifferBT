@@ -104,3 +104,8 @@ nella ricerca dei servizi e distinguerli per questa caratteristica.
 
 14/12/2018
 Controllo e verifica che il metodo di triangolazione trovi il punto corretto.
+
+15/12/2018
+In testTriangulation sto sviluppando con i dovuti accorgimenti sul numero di cerchi l'algoritmo per
+l'individuazione del punto in cui viene rilevato il dispositivo.
+
