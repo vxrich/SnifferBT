@@ -109,3 +109,8 @@ Controllo e verifica che il metodo di triangolazione trovi il punto corretto.
 In testTriangulation sto sviluppando con i dovuti accorgimenti sul numero di cerchi l'algoritmo per
 l'individuazione del punto in cui viene rilevato il dispositivo.
 
+16/12/2018
+Dall'esempio in testTriangulation.py (Usando valori casuali), l'algoritmo per il calcolo dei punti funziona.
+Viene rilevato lo stesso punto utilizzando le intersezioni fra rette differenti.
+--> Si deve adattare a snifferBTServer.py, salvando i punti nei valori x e y e eliminando i doppioni.
+

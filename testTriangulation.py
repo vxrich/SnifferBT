@@ -11,9 +11,9 @@ devices = []
 beacons = []
 
 #devices.append(ScanedDevice("rpi_1", "test_1", "BB:BB:BB:BB:BB:BB", -30))
-devices.append(ScanedDevice("rpi_1", "test_2", "CC:CC:CC:CC:CC:CC", -36))
+devices.append(ScanedDevice("rpi_1", "test_2", "CC:CC:CC:CC:CC:CC", -50))
 devices.append(ScanedDevice("rpi_2", "test_2", "CC:CC:CC:CC:CC:CC", -50))
-devices.append(ScanedDevice("rpi_3", "test_2", "CC:CC:CC:CC:CC:CC", -87))
+devices.append(ScanedDevice("rpi_3", "test_2", "CC:CC:CC:CC:CC:CC", -50))
 #devices.append(ScanedDevice("rpi_2", "test_3", "DD:DD:DD:DD:DD:DD", -20))
 #devices.append(ScanedDevice("rpi_3", "test_1", "BB:BB:BB:BB:BB:BB", -60))
 
@@ -43,7 +43,7 @@ for dev in devices: #Per ogni MAC individuato --> dev lista di ScanedDevicec con
                 dev_cp.append((d,b)) 
                 z = b.x**2 + b.y**2 - d.distance**2
                 circ.append(np.array([b.x*2,b.y*2,z])) #Ottengo le componenti utili del'eq della circonferenza che corrispondo a ax+by+c 
-                print b.rpi_id,b.x*2,b.y*2,z
+                print b.rpi_id,b.x*2,b.y*2,z, d.distance
 
         #Effettuo il prodotto cartesiano tra le circonferenze trovate in modo che nel calcolo delle eq trovo facilemente
         #la retta che congiunge i 2 punti di tangenza tra le circonfereze
@@ -64,11 +64,11 @@ for dev in devices: #Per ogni MAC individuato --> dev lista di ScanedDevicec con
 # Le matrici A e b sono riferite a solo 2 rette, perche per costruzione l'intersezione 
 # delle altre sare lo stesso punto
 print lines
-A = np.array([(lines[0])[0:2], (lines[1])[2]])
-b = np.array([(lines[0])[2],(lines[1])[2]])
+
+A = np.array([(lines[0])[0:2], (lines[2])[0:2]])
+b = np.array([(lines[0])[2],(lines[2])[2]])
 # points conterre' elementi del tipo np.array
-print A 
-print b
+
 points.append(np.linalg.solve(A,b))
 
 print points
