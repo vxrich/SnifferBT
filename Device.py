@@ -39,7 +39,10 @@ class ScanedDevice:
     
 
     def printData(self):
-        print "Scaned by %s --> %s - %s - %d at %s - %s " % (self.rpi_id, self.name, self.addr, self.distance, self.date, self.time)
+        if self.x == None and self.y == None:
+            print "Scaned by %s at %.2fm --> %s - %s at %s - %s " % (self.rpi_id, self.distance, self.name, self.addr,  self.date, self.time)
+        else: 
+            print "Scaned by %s at %.2fm --> %s - %s - [%.2f, %.2f] at %s - %s " % (self.rpi_id, self.distance, self.name, self.addr, self.x, self.y, self.date, self.time)
         for s in self.services:
             print s
         print "-----------------------------------------------"

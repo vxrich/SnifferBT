@@ -36,7 +36,7 @@ X Creazione database sul RPi Server
 
 - Rendere visibili fra loro i RPi
 
-- Programma "Server" che analizza il database e ritorna una semplice analisi
+X Programma "Server" che analizza il database e ritorna una semplice analisi
     Si può usare l'RSSI per triangolare i dati e capire se un smartphone è vicino
     ad un dispositivo secondario e determinare se sono della stessa persona.
     Bisogna tenere conto della tridimensionalità per ottenere una precisione migliore.
