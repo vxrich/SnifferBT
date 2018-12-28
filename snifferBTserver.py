@@ -28,6 +28,7 @@ from collections import defaultdict
 from Device import ScanedDevice, RPiBeacon, Circle
 import numpy as np
 from numpy.linalg import solve
+from GATTServices import GATTServices
 
 # Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio

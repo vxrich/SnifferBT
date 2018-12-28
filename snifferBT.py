@@ -19,6 +19,7 @@ from bluepy.btle import Scanner
 from bluetooth import bluez
 import MySQLdb #Modulo interazione DB
 import cPickle as pickle
+from GATTServices import GATTServices
 
 from Device import ScanedDevice, RPiBeacon
 
@@ -90,9 +91,16 @@ def hciscan():
             print "Impossible to find name of %s. It might not be scanned."   
             print "Device deleted!"         
     
-    #Per ogni dispositivo analizzo i servizi che offre e li salvo in una lista pulendoli da info non necessaries
+    #Per ogni dispositivo analizzo i servizi che offre e li salvo in una lista pulendoli da info non necessarie
     for dev in devices:
-        services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse ' +dev.addr+ ' | grep "Service Name"').readlines())]
+        extended_services = [(s.replace('Service Name: ', '')).replace('\n', '') for s in (os.popen('sdptool browse ' +dev.addr+ ' | grep "Service Name"').readlines())]
+        
+        service = [0 for _ in range(0,40)]
+
+        for key,val in GATTServices:
+            if val in extended_services:
+                service[key] = 1
+
         dev.setServices(services)
 
     print "Scan completed!"
