@@ -53,6 +53,8 @@ X IMPORTANTE!!!!!!!!
 X Lo split in hciscan() non tiene conto dei nomi con gli spazi
     Sistemato utilizzando join e splicer python    
 
+- Catalogare dispositivi in base ai servizi e alla posizione
+
 
 ----------------------------------------------------------------------
 Lista TODO REFACTORING

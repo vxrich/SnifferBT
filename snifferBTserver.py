@@ -223,6 +223,11 @@ def evaluationData():
     for d in clean_dev:
         d.printData()
 
+    for d in clean_dev:
+        for 
+
+    
+
 
 
 os.system("sudo service mysql restart")
