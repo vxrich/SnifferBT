@@ -2,6 +2,7 @@ MAC ADDRESS GALAXY A5: 1C:23:2C:03:F7:04
 MAC ADDRESS ID107 HR: C1:91:34:83:0E:F0
 MAC ADDRESS webOS TV: 14:BB:6E:02:E2:79 (public) /7D:99:6A:39:EF:F8 (random)
 MAC ADDRESS YDY NRF M106: FB:D2:31:5A:FC:47
+MAC ADDRESS AUKEY EP-B40: 00:23:02:30:1D:0D
 
 ID107 HR --> Facile da trovare.
 MOTO 360 --> Non facile da trovare, sembra faccia advertising.
@@ -114,7 +115,7 @@ Dall'esempio in testTriangulation.py (Usando valori casuali), l'algoritmo per il
 Viene rilevato lo stesso punto utilizzando le intersezioni fra rette differenti.
 --> Si deve adattare a snifferBTServer.py, salvando i punti nei valori x e y e eliminando i doppioni. (Fatto)
 
-3/12/2019
+3/1/2019
 Individuare se ci sono dispositivi in un raggio ristretto di un punto e catalogarli tramite i servizi GATT
 in modo da determinare successivamente le persone.
 Potrebbe essere possibile trovare il numero di persone rilevando solo il bluetooth degli smartphone
@@ -123,3 +124,7 @@ possiedono un dispositivo, più facilmente una smartband, accesa e non collegata
 Per quanto riguarda le cuffie bluetooth solitamente se sono accese sono anche connesse altrimenti sevono
 a poco. 
 
+6/1/2019
+Provare ad utilizzare "sudo sdptool records mac_address" per trovare delle specifiche dei servizi forniti
+dal dispositivo. Non vengono riportati i nomi corretti dei GATT Services.
+I servizi veongo visti solo quando il dispositivo è in modalità advertising. (AUKEY EP-B40)

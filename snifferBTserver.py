@@ -223,6 +223,7 @@ def evaluationData():
     for d in clean_dev:
         d.printData()
 
+    #Trovare il numerp di persone in base alla posizione dei dispositivi.
     for d in clean_dev:
         for 
 
