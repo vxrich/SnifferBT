@@ -47,12 +47,12 @@ Per non far crashare il WiFi bisonga fare down e up di hci0 tramite hciconfig
 (ma comunque non funziona sempre -.-)
 Lo scan funziona correttamente basta non farlo partire con SSH altrimenti salta 
 la connessione, facendolo partire direttamente dalla RPi fa saltare la connessione 
-WiFi del pertatile senza essere collegato ad esso in SSH
+WiFi del portatile senza essere collegato ad esso in SSH
 
 // BluezBLE //
 Non funzione, non esiste discover_devices()
 
-// hcitool lescnan //
+// hcitool lescan //
 Vede ID107 HR ma non vede telefono e MOTO360
 
 // iBeacon //
