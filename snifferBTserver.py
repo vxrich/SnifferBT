@@ -16,7 +16,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'nome'@'localhost';
 from __future__ import division
 from bluetooth.ble import BeaconService
 
-import datetime
+import datetime 
 import os
 import MySQLdb
 import time
@@ -212,7 +212,7 @@ def evaluationData():
             A = np.array([(lines[0])[0:2], (lines[2])[0:2]])
             b = np.array([(lines[0])[2],(lines[2])[2]])
             
-            # points conterre' elementi del tipo np.array
+            # points conterrá elementi del tipo np.array
             point = np.linalg.solve(A,b)
 
             #Setto la posizione solo al primo dei 3 trovati e lo salvo nei device trovati in modo da non avere 
@@ -224,8 +224,8 @@ def evaluationData():
         d.printData()
 
     #Trovare il numerp di persone in base alla posizione dei dispositivi.
-    for d in clean_dev:
-        for 
+    #for d in clean_dev:
+    #    for 
 
     
 

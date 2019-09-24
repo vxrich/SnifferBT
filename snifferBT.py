@@ -30,7 +30,7 @@ UUID_DATA_STR = "rp_1-salotto-x-y" # usare - per separare i campi
 TAG = ["name", "dev_found", "rssi"]
 
 WAITING_TIME = 120 #Secondi
-SCAN_TIME = 10 #Secondi
+SCAN_TIME = 10 #Secondi 
 SLEEP_BETWEEN_SCAN = 300
 
 # Trovi questi parametri https://github.com/IanHarvey/bluepy/blob/master/bluepy/btle.py
