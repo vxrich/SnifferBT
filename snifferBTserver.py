@@ -226,11 +226,16 @@ def evaluationData():
 
     #Trovare il numerp di persone in base alla posizione dei dispositivi.
     #09/10/19
+    #Difficile classificare i dispositivi con questa accuratezza per problemi di SDP
     count = len(clean_dev)
     for d in clean_dev:
         for d1 in clean_dev:
             if d.addr != d1.addr or dist(d.position,d1.position) < 1.5
-                if d.type ==
+                if d.type == d1.type == "SMARTPHONE"
+                    pass
+                elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
+                    count -= 1
+                elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
 
     print "##################################"
     print "  FOUND &d PERSONS IN THIS AREA!", count
