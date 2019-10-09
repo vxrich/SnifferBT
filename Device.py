@@ -16,8 +16,10 @@ class ScanedDevice:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
         self.services = []
+        self.type = None
         self.x = x
         self.y = y
+        self.position = (x,y)
 
     def _rssiToMeters(self, rssi):
     
@@ -34,9 +36,7 @@ class ScanedDevice:
         self.services = services
 
     def setPosition(self, x,y):
-        self.x = x
-        self.y = y
-    
+        self.position = (x,y)
 
     def printData(self):
         if self.x == None and self.y == None:

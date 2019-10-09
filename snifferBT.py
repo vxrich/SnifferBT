@@ -14,7 +14,7 @@ import datetime
 import os
 import time
 
-from bluetooth.ble import BeaconService
+#from bluetooth.ble import BeaconService
 from bluepy.btle import Scanner
 from bluetooth import bluez
 import MySQLdb #Modulo interazione DB
@@ -127,14 +127,14 @@ def beaconScan():
 
     return beacons
 
-def insertDash(string, pos):
+def _insertDash(string, pos):
 
     for x in pos:
         string = string[:x] + '-' + string[x:]
 
     return string
 
-def uuidStrToHex(uuid_str, pos):
+def _uuidStrToHex(uuid_str, pos):
 
     convHex = binascii.hexlify(UUID_DATA_STR)
 
@@ -147,7 +147,7 @@ def uuidStrToHex(uuid_str, pos):
     elif length < 32:
         convHex = convHex + "".join('0' for _ in range(32-len(convHex))) 
 
-    uuid_hex = insertDash(convHex, pos)
+    uuid_hex = _insertDash(convHex, pos)
 
     #print uuid_hex
 
@@ -162,7 +162,7 @@ def piAdv():
 
     print "Starting advertising .."
     service = BeaconService()
-    service.start_advertising(uuidStrToHex(UUID_DATA_STR, DASH_POS), 1, 1, 1, 200)
+    service.start_advertising(_uuidStrToHex(UUID_DATA_STR, DASH_POS), 1, 1, 1, 200)
     time.sleep(15)
     service.stop_advertising()
     print "Advertising complete!"

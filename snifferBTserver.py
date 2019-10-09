@@ -49,6 +49,8 @@ rpi_users = [
 
 rpi_beacons =[]
 
+MAX_DISTANCE = 1.5
+
 CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
 USE_DB = "USE devices_db"
 
@@ -184,7 +186,7 @@ def evaluationData():
                 for b in beacons:
                     if d.rpi_id == b.rpi_id:
                         dev_cp.append((d,b)) 
-                        z = b.x**2 + b.y**2 - d.distance**2
+                        z = b.x**2 + b.y**2 - d.distance**2 #
                         circ.append(np.array([b.x*2,b.y*2,z])) #Ottengo le componenti utili del'eq della circonferenza che corrispondo a ax+by+c 
                         #print b.rpi_id,b.x*2,b.y*2,z, d.distance
 
@@ -200,11 +202,10 @@ def evaluationData():
                 line = np.subtract(a,b)
                 #lin_eq[2]= lin_eq[2]/2
                 lines.append(line)
-            
 
             # Per trovare l'intersezione utilizzo la funzione di risoluzione dei sistemi lineari
             # di numpy, prima pero' devo costruire la matrice A e b
-            # Le matrici A e b sono riferite a solo 2 rette, perche per costruzione l'intersezione 
+            # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
             # delle altre sare lo stesso punto
 
             #print lines
@@ -224,10 +225,17 @@ def evaluationData():
         d.printData()
 
     #Trovare il numerp di persone in base alla posizione dei dispositivi.
-    #for d in clean_dev:
-    #    for 
+    #09/10/19
+    count = len(clean_dev)
+    for d in clean_dev:
+        for d1 in clean_dev:
+            if d.addr != d1.addr or dist(d.position,d1.position) < 1.5
+                if d.type ==
 
-    
+    print "##################################"
+    print "  FOUND &d PERSONS IN THIS AREA!", count
+    print "##################################"
+
 
 
 
@@ -242,3 +250,4 @@ while True:
     #evaluationData()
     time.sleep(30)
 """
+evaluationData()
