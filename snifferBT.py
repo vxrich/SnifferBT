@@ -15,8 +15,8 @@ import os
 import time
 
 #from bluetooth.ble import BeaconService
-from bluepy.btle import Scanner
-from bluetooth import bluez
+#from bluepy.btle import Scanner
+#from bluetooth import bluez
 import MySQLdb #Modulo interazione DB
 import cPickle as pickle
 from GATTServices import GATTServices
