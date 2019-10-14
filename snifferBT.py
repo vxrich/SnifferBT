@@ -277,7 +277,8 @@ while True:
 
     #load_devices(devices)
     #load_beacons(beacons)
-    #load_obj(devices, beacons)
+    
+    load_obj(devices, beacons)
 
     time.sleep(SLEEP_BETWEEN_SCAN)
 

@@ -230,8 +230,8 @@ def evaluationData():
     count = len(clean_dev)
     for d in clean_dev:
         for d1 in clean_dev:
-            if d.addr != d1.addr or dist(d.position,d1.position) < 1.5
-                if d.type == d1.type == "SMARTPHONE"
+            if d.addr != d1.addr or dist(d.position,d1.position) < 1.5:
+                if d.type == d1.type == "SMARTPHONE":
                     pass
                 elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
                     count -= 1
