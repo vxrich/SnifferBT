@@ -25,7 +25,7 @@ import cPickle as pickle
 from scipy.spatial.distance import euclidean as dist
 from itertools import combinations, groupby
 from collections import defaultdict
-from Device import ScanedDevice, RPiBeacon, Circle
+from Device import ScanedDevice, RPiBeacon
 import numpy as np
 from numpy.linalg import solve
 from GATTServices import GATTServices
