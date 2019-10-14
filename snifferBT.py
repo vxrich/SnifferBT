@@ -43,7 +43,7 @@ IS_BLE = 1
 NOT_BLE = 0
 
 #Dati per la connessione con il DataBase
-HOST_NAME = "192.168.1.15"
+HOST_NAME = "localhost"
 PORT = 3306
 ID = RPI_ID
 PSW = "password_1"
@@ -199,6 +199,14 @@ Funzione per caricare oggetti nel DB serializzandoli con Pickle
 Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, ognuno nella tabella corretta
 """
 def load_obj(devices,beacons):
+
+    if devices == []:
+        if becons == []:
+            print "There are 0 devices to load"
+        return
+    else:
+        print "There are %d devices and %d becons to load" % (len(devices), len(becons))
+
 
     serialized_devices =[ pickle.dumps(dev) for dev in devices]
     serialized_beacons = [ pickle.dumps(beacon) for beacon in beacons]

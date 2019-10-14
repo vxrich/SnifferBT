@@ -247,7 +247,7 @@ def evaluationData():
                     pass
 
     print "##################################"
-    print "  FOUND &d PERSONS IN THIS AREA!", count
+    print "  FOUND &d PERSONS IN THIS AREA!" % (count)
     print "##################################"
 
 
