@@ -110,6 +110,14 @@ def printData():
     for row in rows:
         print row
 
+    print "##############################"
+
+    cur.execute("SELECT * FROM serial_device")
+    rows = cur.fetchall()
+
+    for dev in rows:
+        dev.printData()
+
     db.commit()
     db.close()
 
@@ -255,4 +263,5 @@ while True:
     #evaluationData()
     time.sleep(30)
 """
-evaluationData()
+#evaluationData()
+
