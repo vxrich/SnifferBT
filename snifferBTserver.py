@@ -236,11 +236,11 @@ def evaluationData():
                 elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
                     count -= 1
                 elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
+                    pass
 
     print "##################################"
     print "  FOUND &d PERSONS IN THIS AREA!", count
     print "##################################"
-
 
 
 
