@@ -88,7 +88,7 @@ def hciscan():
         try:
             devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
         except ValueError:
-            print "Impossible to find name of %s. It might not be scanned."   
+            print "Impossible to find name of %s. It might not be scanned." % (d[d.index(TAG[1])+1])  
             print "Device deleted!"         
     
     #Per ogni dispositivo analizzo i servizi che offre e li salvo in una lista pulendoli da info non necessarie
@@ -201,11 +201,11 @@ Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, ognuno nella tab
 def load_obj(devices,beacons):
 
     if devices == []:
-        if becons == []:
+        if beacons == []:
             print "There are 0 devices to load"
         return
     else:
-        print "There are %d devices and %d becons to load" % (len(devices), len(becons))
+        print "There are %d devices and %d becons to load" % (len(devices), len(beacons))
 
 
     serialized_devices =[ pickle.dumps(dev) for dev in devices]
