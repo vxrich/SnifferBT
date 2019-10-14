@@ -154,7 +154,7 @@ def evaluationData():
     cur.execute(USE_DB)
 
     #Fetch dei device scansionati
-    cur.execute("SELECT * FROM serial_dev;")
+    cur.execute("SELECT * FROM serial_device;")
     fetch = cur.fetchall()
     devices = deserialize_devices(fetch)
     devices.sort(key=lambda x: x.addr)
