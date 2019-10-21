@@ -1,5 +1,6 @@
 import datetime
 import binascii
+from SDP_services import SDP_services
 
 """
 Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
@@ -16,7 +17,7 @@ class ScanedDevice:
         self.date = str(datetime.datetime.now().date())
         self.time = str(datetime.datetime.now().time().replace(microsecond=0))
         self.services = []
-        self.type = None
+        self.type = self._setType()
         self.x = x
         self.y = y
         self.position = (x,y)
@@ -31,6 +32,14 @@ class ScanedDevice:
         txPower = -64
         return round(pow(10, (txPower - rssi) / (10 * N)),2)
 
+    def _setType(self):
+
+        if "0x1132" in SDP_services: 
+            self.type = "SMARTPHONE"
+        elif "" in SDP_services:
+            self.type = "SMARTBAND"
+        elif "" in SDP_services:
+            self.type = "HEADSET"
 
     def setServices(self, services):
         self.services = services
