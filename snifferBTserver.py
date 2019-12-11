@@ -14,7 +14,7 @@ CREATE USER 'nome'@'localhost' IDENTIFIED BY 'nome';
 GRANT ALL PRIVILEGES ON *.* TO 'nome'@'localhost';
 """
 from __future__ import division
-from bluetooth.ble import BeaconService
+# from bluetooth.ble import BeaconService
 
 import datetime 
 import os

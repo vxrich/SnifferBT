@@ -1,6 +1,6 @@
 import datetime
 import binascii
-from SDP_services import SDP_services
+from SDP_Services import SDP_Services
 
 """
 Classe che crea un oggetto device scansionato con tutti gli attributi necessari alla creazione
