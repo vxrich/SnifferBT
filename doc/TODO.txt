@@ -55,6 +55,8 @@ X Lo split in hciscan() non tiene conto dei nomi con gli spazi
 
 - Catalogare dispositivi in base ai servizi e alla posizione
 
+- Test con RPi in diverse posizioni
+
 
 ----------------------------------------------------------------------
 Lista TODO REFACTORING

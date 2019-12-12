@@ -36,6 +36,7 @@ warnings.filterwarnings('error', category=MySQLdb.Warning)
 
 # C'è da creare un user mysql prima di avviare il programma oppure lo si crea direttamente
 # da qui dentro connettendosi da root
+#QUESTI DATI ANDRANNO MESSI IN UN FILE DI CONFIGURAZIONE
 HOST_NAME = "localhost"
 ID = "root"
 PSW = "asusx205ta"

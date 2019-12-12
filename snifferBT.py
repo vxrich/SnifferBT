@@ -23,6 +23,7 @@ from GATTServices import GATTServices
 
 from Device import ScanedDevice, RPiBeacon
 
+#QUESTI DATI ANDRANNO MESSI IN UN FILE DI CONFIGURAZIONE
 RPI_ID = "rpi_1"
 #Sfruttiamo l'UUID per inviare nome-locale-posizionex-posizioney
 UUID_DATA_STR = "rp_1-salotto-x-y" # usare - per separare i campi
