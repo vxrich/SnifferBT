@@ -99,19 +99,16 @@ def hciScanAll():
     scandevices.pop(0)
     scandevices.pop()
 
-    log = open("log.txt","a") 
-    log.write(scandevices)
-    log.write("######################################")
-   
+    #Rimuovo le righe che iniziano con AD flags
+    for i, lines in enumerate(scandevices):
+        if "AD flags" in lines: 
+            scandevices.pop(i)
 
     #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
-    scandevices = scandevices[::2] #elimina la riga AD flags
+    # scandevices = scandevices[::2] #elimina la riga AD flags
     scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
 
-    log.write(scandevices)
-    log.write("######################################")
-
-    print "##########SCAN DEVICES##########"
+    print "########## SCAN DEVICES ##########"
     print scandevices
 
     for dev in scandevices:
@@ -120,11 +117,10 @@ def hciScanAll():
         try:
             devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0])+1]), d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None)) 
         except ValueError:
-            devices.append(ScanedDevice(RPI_ID, None, d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None))     
+            devices.append(ScanedDevice(RPI_ID, "RANDOM", d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None))     
    
-    log.write(evices)
-    log.write("######################################")
-    log.close()
+    print "########## SCAN DEVICES 2 ##########"
+    print devices
 
     print "Scan completed!"
     print "-----------------------------------------------"
