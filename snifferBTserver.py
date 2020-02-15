@@ -30,6 +30,8 @@ import numpy as np
 from numpy.linalg import solve
 from GATTServices import GATTServices
 
+from server_query import *
+
 # Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
 warnings.filterwarnings('error', category=MySQLdb.Warning)
@@ -45,24 +47,13 @@ DB_NAME = "devices_db"
 rpi_users = [
     ("rpi_1", "192.168.178.37", "password_1"),
     ("rpi_2", "192.168.178.45", "password_2"),
-    ("rpi_3", "192.168.1.15", "password_3")
+    ("rpi_3", "192.168.178.20", "password_3")
 ]
 
 rpi_beacons =[]
 
 MAX_DISTANCE = 1.5
 
-CREATE_DB = "CREATE DATABASE IF NOT EXISTS devices_db"
-USE_DB = "USE devices_db"
-
-CREATE_TABLE_SERIALIZE_DEVICE = "CREATE TABLE IF NOT EXISTS serial_device (device_obj varchar(500))"
-CREATE_TABLE_SERIALIZE_BEACON = "CREATE TABLE IF NOT EXISTS serial_beacon (beacon_obj varchar(500))"
-CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS device (rpi_id varchar(10), name varchar(20), addr varchar(17), rssi int(4), date varchar(12), time varchar(8), PRIMARY KEY(rpi_id, addr))"
-CREATE_TABLE_BEACON = "CREATE TABLE IF NOT EXISTS rpi_beacon (id varchar(10) PRIMARY KEY, location varchar(15), addr varchar(17), rssi int(4), date varchar(12), time varchar(8));"
-
-fromGRANT = "GRANT PREVILEGES ON *.* TO '%s'"
-
-queries = [CREATE_DB, USE_DB, CREATE_TABLE_BEACON, CREATE_TABLE_DEVICE, CREATE_TABLE_SERIALIZE_DEVICE, CREATE_TABLE_SERIALIZE_BEACON]
 
 """
 dbStartUp()
@@ -92,7 +83,7 @@ def dbStartUp():
             print "User %s is already created!" % (user[0])    
         cur.execute("GRANT ALL PRIVILEGES ON *.* TO '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
     
-    cur.execute("FLUSH PRIVILEGES;")
+    cur.execute(FLUSH)
 
     db.commit()
     db.close()
@@ -105,7 +96,7 @@ def printData():
 
     print "--------------------------"
     
-    cur.execute("SELECT * FROM devices")
+    cur.execute(SELECT_ALL_DEV)
     rows = cur.fetchall()
 
     for row in rows:
@@ -113,7 +104,7 @@ def printData():
 
     print "##############################"
 
-    cur.execute("SELECT * FROM serial_device")
+    cur.execute(SELECT_ALL_SER_DEV)
     rows = cur.fetchall()
 
     for dev in rows:
@@ -264,5 +255,6 @@ while True:
     #evaluationData()
     time.sleep(30)
 """
+printData()
 #evaluationData()
 
