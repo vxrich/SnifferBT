@@ -105,10 +105,11 @@ def hciScanAll():
 
     for dev in scandevices:
         d = dev.split()
-        try:
-            devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
-        except ValueError:
-            devices.append(ScanedDevice(RPI_ID, None, d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None))     
+        print d
+        # try:
+        #     devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
+        # except ValueError:
+        #     devices.append(ScanedDevice(RPI_ID, None, d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None))     
    
     print "Scan completed!"
     print "-----------------------------------------------"

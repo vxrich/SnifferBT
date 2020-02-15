@@ -1,4 +1,4 @@
-TAG = ["name", "dev_found", "rssi"]
+TAG = ["name", "dev_found:", "rssi"]
 
 WAITING_TIME = 120 #Secondi
 SCAN_TIME = 10 #Secondi 
