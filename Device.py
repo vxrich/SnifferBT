@@ -30,7 +30,7 @@ class ScanedDevice:
         #d = 10 ^ ((TxPower - RSSI) / (10 * n))
         N = 2
         txPower = -64
-        return round(pow(10, (txPower - rssi) / (10 * N)),2)
+        return round(pow(10, (txPower - int(rssi)) / (10 * N)),2)
 
     def _setType(self):
 
