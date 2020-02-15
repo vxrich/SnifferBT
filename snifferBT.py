@@ -284,7 +284,7 @@ i = 0
 
 #Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
 while not devices and i < SCAN_LOOP:
-    devices = hciScan()
+    devices = hciScanAll()
     time.sleep(10)
     i += 1
         
