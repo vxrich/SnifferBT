@@ -103,6 +103,9 @@ def hciScanAll():
     scandevices = scandevices[::2] #elimina la riga AD flags
     scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
 
+    print "##########SCAN DEVICES##########"
+    print scandevices
+
     for dev in scandevices:
         d = dev.split()
         print d

@@ -34,11 +34,11 @@ class ScanedDevice:
 
     def _setType(self):
 
-        if "0x1132" in SDP_services: 
+        if "0x1132" in SDP_Services: 
             self.type = "SMARTPHONE"
-        elif "" in SDP_services:
+        elif "" in SDP_Services:
             self.type = "SMARTBAND"
-        elif "" in SDP_services:
+        elif "" in SDP_Services:
             self.type = "HEADSET"
 
     def setServices(self, services):
