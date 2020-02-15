@@ -21,43 +21,12 @@ import MySQLdb #Modulo interazione DB
 import cPickle as pickle
 from GATTServices import GATTServices
 
+from constants import *
+from client_query import *
+from confgi import *
+
 from Device import ScanedDevice, RPiBeacon
 
-#QUESTI DATI ANDRANNO MESSI IN UN FILE DI CONFIGURAZIONE
-RPI_ID = "rpi_1"
-#Sfruttiamo l'UUID per inviare nome-locale-posizionex-posizioney
-UUID_DATA_STR = "rp_1-salotto-x-y" # usare - per separare i campi
-
-TAG = ["name", "dev_found", "rssi"]
-
-WAITING_TIME = 120 #Secondi
-SCAN_TIME = 10 #Secondi 
-SLEEP_BETWEEN_SCAN = 300
-
-# Trovi questi parametri https://github.com/IanHarvey/bluepy/blob/master/bluepy/btle.py
-COMPLETE_NAME = 0X09 #ID nome nell'oggetto ScanEntry
-PUBLIC_TARGET_ADDRESS = 0X17
-RANDOM_TARGET_ADDRESS = 0x18
-MANUFACTURER = 0xFF
-
-IS_BLE = 1
-NOT_BLE = 0
-
-#Dati per la connessione con il DataBase
-HOST_NAME = "localhost"
-PORT = 3306
-ID = RPI_ID
-PSW = "password_1"
-DB_NAME = "devices_db"
-
-ADV_DATA = ""
-ADV_TIME = 15
-
-DASH_POS = [8, 13, 18, 23]
-BEACON_SCAN_TIME = 15
-
-INSERT_DEVICE = 'INSERT INTO serial_device(device_obj) VALUES("%s")'
-INSERT_BEACON = 'INSERT INTO serial_beacon(beacon_obj) VALUES("%s");'
 
 def getPassword():
 
@@ -65,8 +34,11 @@ def getPassword():
     PSW_HASH = binascii.hexlify(PSW)
 
 
-#Scan dei device con tool interni a linux
-def hciscan():
+"""
+Scan dei device con tool interni a linux, i risultati vengono poi filtrati per i dispositivi
+con nome risolvibile
+"""
+def hciScan():
 
     devices = []
     scandevices = []
@@ -106,6 +78,42 @@ def hciscan():
 
     print "Scan completed!"
     print "-----------------------------------------------"
+
+    return devices
+
+"""
+Scan dei dispositivi interni di linux senza filtrare i dati in modo da ottenere tutti i dispositivi 
+presenti anche se mostrano solo l'indirizzo random
+"""
+def hciScanAll():
+
+    devices = []
+    scandevices = []
+
+    print "Start scanning devices ..."
+    os.system("sudo hciconfig hci0 up")
+    scandevices = os.popen("sudo btmgmt find").readlines()
+    
+    #Rimuovo le prime 2 righe generate e l'ultima, che sono generate da btmgmt
+    scandevices.pop(0)
+    scandevices.pop(0)
+    scandevices.pop()
+
+    #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
+    scandevices = scandevices[::2] #elimina la riga AD flags
+    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
+
+    for dev in scandevices:
+        d = dev.split()
+        try:
+            devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None)) 
+        except ValueError:
+            devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0]):]), d[d.index(TAG[1])+1], d[d.index(TAG[2])], None, None))     
+   
+    print "Scan completed!"
+    print "-----------------------------------------------"
+
+
 
     return devices
 
@@ -262,34 +270,34 @@ def load_beacons(beacons):
 
 #if __init__ == "__main__":
 
-while True:
+# while True:
 
-    devices = []
-    beacons = []
+devices = []
+beacons = []
 
-    #piAdv()
+#piAdv()
 
-    #beacons = beaconScan()
-     
-    # devices = scan_devices() + lescan_devices()
-    i = 0
-
-    #Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
-    while not devices and i < 2:
-        devices = hciscan()
-        time.sleep(10)
-        i += 1
-         
-
-    for dev in devices:
-        dev.printData()
-
-    #load_devices(devices)
-    #load_beacons(beacons)
+#beacons = beaconScan()
     
-    load_obj(devices, beacons)
+# devices = scan_devices() + lescan_devices()
+i = 0
 
-    time.sleep(SLEEP_BETWEEN_SCAN)
+#Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
+while not devices and i < SCAN_LOOP:
+    devices = hciScan()
+    time.sleep(10)
+    i += 1
+        
+
+for dev in devices:
+    dev.printData()
+
+#load_devices(devices)
+#load_beacons(beacons)
+
+load_obj(devices, beacons)
+
+time.sleep(SLEEP_BETWEEN_SCAN)
 
 
 

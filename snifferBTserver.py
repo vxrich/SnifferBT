@@ -43,9 +43,9 @@ PSW = "asusx205ta"
 DB_NAME = "devices_db"
 
 rpi_users = [
-    ("rpi_1", "192.168.1.1", "password_1"),
-    ("rpi_2", "192.168.1.3", "password_2"),
-    ("rpi_3", "192.168.1.15", "password_1")
+    ("rpi_1", "192.168.178.37", "password_1"),
+    ("rpi_2", "192.168.178.45", "password_2"),
+    ("rpi_3", "192.168.1.15", "password_3")
 ]
 
 rpi_beacons =[]
