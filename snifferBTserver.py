@@ -69,6 +69,7 @@ def dbStartUp():
         except MySQLdb.Warning:
             print "User %s is already created!" % (user[0])    
         cur.execute(GRANT_PRIVILEGES % (user[0], user[1]))
+        cur.execute(ALTER_USER % (user[0], user[1], user[2]))
     cur.execute(FLUSH)
 
     db.commit()
@@ -91,7 +92,7 @@ def printData():
     print "############### SERIAL DEVICES ###############"
 
     cur.execute(SELECT_ALL_SER_DEV)
-    rows = cur.fetchall()
+    rows = deserialize_devices(cur.fetchall())
 
     for dev in rows:
         dev.printData()
