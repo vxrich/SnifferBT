@@ -31,24 +31,11 @@ from numpy.linalg import solve
 from GATTServices import GATTServices
 
 from server_query import *
+from server_config import *
 
 # Permette di catturare nei try/except i warnings come se fossero errori in modo
 # da gestirli meglio
 warnings.filterwarnings('error', category=MySQLdb.Warning)
-
-# C'è da creare un user mysql prima di avviare il programma oppure lo si crea direttamente
-# da qui dentro connettendosi da root
-#QUESTI DATI ANDRANNO MESSI IN UN FILE DI CONFIGURAZIONE
-HOST_NAME = "localhost"
-ID = "root"
-PSW = "asusx205ta"
-DB_NAME = "devices_db"
-
-rpi_users = [
-    ("rpi_1", "192.168.178.37", "password_1"),
-    ("rpi_2", "192.168.178.45", "password_2"),
-    ("rpi_3", "192.168.178.20", "password_3")
-]
 
 rpi_beacons =[]
 
@@ -78,11 +65,10 @@ def dbStartUp():
 
     for user in rpi_users:
         try:
-            cur.execute("CREATE USER IF NOT EXISTS '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
+            cur.execute(CREATE_USER % (user[0], user[1], user[2]))
         except MySQLdb.Warning:
             print "User %s is already created!" % (user[0])    
-        cur.execute("GRANT ALL PRIVILEGES ON *.* TO '%s'@'%s' IDENTIFIED BY '%s'" % (user[0], user[1], user[2]))
-    
+        cur.execute(GRANT_PRIVILEGES % (user[0], user[1]))
     cur.execute(FLUSH)
 
     db.commit()
@@ -94,7 +80,7 @@ def printData():
     
     cur.execute(USE_DB)
 
-    print "--------------------------"
+    print "############### DEVICES ###############"
     
     cur.execute(SELECT_ALL_DEV)
     rows = cur.fetchall()
@@ -102,7 +88,7 @@ def printData():
     for row in rows:
         print row
 
-    print "##############################"
+    print "############### SERIAL DEVICES ###############"
 
     cur.execute(SELECT_ALL_SER_DEV)
     rows = cur.fetchall()
@@ -154,13 +140,13 @@ def evaluationData():
     cur.execute(USE_DB)
 
     #Fetch dei device scansionati
-    cur.execute("SELECT * FROM serial_device;")
+    cur.execute(SELECT_ALL_DEV)
     fetch = cur.fetchall()
     devices = deserialize_devices(fetch)
     devices.sort(key=lambda x: x.addr)
 
     #Fetch dei RPiBeacon
-    cur.execute("SELECT * FROM serial_beacon;")
+    cur.execute(SELECT_ALL_BEACON)
     fetch = cur.fetchall()
     beacons = deserialize_devices(fetch)
 

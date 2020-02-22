@@ -1,0 +1,4 @@
+python-mysqldb
+mysql-server
+mysql-client
+scipy 

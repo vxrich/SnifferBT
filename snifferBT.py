@@ -23,7 +23,7 @@ from GATTServices import GATTServices
 
 from constants import *
 from client_query import *
-from config import *
+from client_config import *
 
 from Device import ScanedDevice, RPiBeacon
 
