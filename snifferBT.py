@@ -112,7 +112,7 @@ def hciScanAll():
 
     for dev in scandevices:
         d = dev.split()
-        for t in len(d):
+        for t in range(0,len(d)):
             print d[t]
         print "-----------------------------------------------"
 
