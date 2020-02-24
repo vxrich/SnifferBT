@@ -109,7 +109,10 @@ def hciScanAll():
     scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
 
     print "########## SCAN DEVICES ##########"
-    print scandevices
+    for dev in scandevices:
+        for i in length(dev):
+            print dev[i]
+        print "-----------------------------------------------"
 
     for dev in scandevices:
         d = dev.split()
@@ -119,8 +122,6 @@ def hciScanAll():
         except ValueError:
             devices.append(ScanedDevice(RPI_ID, "RANDOM", d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None))     
    
-    print "########## SCAN DEVICES 2 ##########"
-    print devices
 
     print "Scan completed!"
     print "-----------------------------------------------"
