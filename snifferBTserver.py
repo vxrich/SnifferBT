@@ -75,6 +75,17 @@ def dbStartUp():
     db.commit()
     db.close()
 
+def deleteDatabase():
+    choose = raw_input("Sei sicuro di voler cancellare il databse? (y,n)")
+    if choose.lower() == "y":
+        db = MySQLdb.connect(HOST_NAME, ID, PSW)
+        cur = db.cursor()
+        cur.execute(USE_DB)
+        cur.execute(DELETE_DATABASE)
+        return 0
+    else:
+        return 0
+
 def printData():
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
@@ -229,19 +240,37 @@ def evaluationData():
     print "  FOUND &d PERSONS IN THIS AREA!" % (count)
     print "##################################"
 
+def command(arg):
+    switcher={
+        0: exit,
+        1: printData,
+        2: deleteDatabase
+        }
+    return switcher[int(arg)]()
 
 
 os.system("sudo service mysql restart")
-
 dbStartUp()
-"""
-while True:
 
-    #rpi_beacons = beaconScan()
-    #printData()
-    #evaluationData()
-    time.sleep(30)
-"""
-printData()
-#evaluationData()
+while True:
+    options = ["\n1 - Stampa il database", "2 - Cancella il database", "0 - Uscita\n"]
+    for opt in options:
+        print opt
+
+    choose = raw_input("Scegli un'opzione:")
+    command(choose)
+
+
+
+# dbStartUp()
+# """
+# while True:
+
+#     #rpi_beacons = beaconScan()
+#     #printData()
+#     #evaluationData()
+#     time.sleep(30)
+# """
+# printData()
+# #evaluationData()
 

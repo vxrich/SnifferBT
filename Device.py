@@ -32,7 +32,7 @@ class ScanedDevice:
         #Potenza misurata dai costruttori del chip, valore inviato nei pacchetti potrebbe essere letto con
         # readbear nano
         txPower = -6
-        return round(pow(10, float(txPower - (rssi)) / (10 * N)),2)
+        return round(pow(10, float(txPower - int(rssi)) / (10 * N)),2)
 
     def _setType(self):
 
