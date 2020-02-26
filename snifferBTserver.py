@@ -57,7 +57,7 @@ def dbStartUp():
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
 
-    for query in queries:
+    for query in QUERIES:
         try:
             cur.execute(query)
         except MySQLdb.Warning:
@@ -222,29 +222,30 @@ def evaluationData():
     for d in clean_dev:
         d.printData()
 
-    #Trovare il numerp di persone in base alla posizione dei dispositivi.
-    #09/10/19
-    #Difficile classificare i dispositivi con questa accuratezza per problemi di SDP
-    count = len(clean_dev)
-    for d in clean_dev:
-        for d1 in clean_dev:
-            if d.addr != d1.addr or dist(d.position,d1.position) < 1.5:
-                if d.type == d1.type == "SMARTPHONE":
-                    pass
-                elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
-                    count -= 1
-                elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
-                    pass
+    # #Trovare il numerp di persone in base alla posizione dei dispositivi.
+    # #09/10/19
+    # #Difficile classificare i dispositivi con questa accuratezza per problemi di SDP
+    # count = len(clean_dev)
+    # for d in clean_dev:
+    #     for d1 in clean_dev:
+    #         if d.addr != d1.addr or dist(d.position,d1.position) < 1.5:
+    #             if d.type == d1.type == "SMARTPHONE":
+    #                 pass
+    #             elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
+    #                 count -= 1
+    #             elif d.type == "SMARTPHONE" and d1.type == "SMARTBAND":
+    #                 pass
 
-    print "##################################"
-    print "  FOUND &d PERSONS IN THIS AREA!" % (count)
-    print "##################################"
+    # print "##################################"
+    # print "  FOUND &d PERSONS IN THIS AREA!" % (count)
+    # print "##################################"
 
 def command(arg):
     switcher={
         0: exit,
         1: printData,
-        2: deleteDatabase
+        2: deleteDatabase,
+        3: dbStartUp,
         }
     return switcher[int(arg)]()
 
@@ -253,7 +254,7 @@ os.system("sudo service mysql restart")
 dbStartUp()
 
 while True:
-    options = ["\n1 - Stampa il database", "2 - Cancella il database", "0 - Uscita\n"]
+    options = ["\n1 - Stampa il database", "2 - Cancella il database", "3 - Database Startup", "0 - Uscita\n"]
     for opt in options:
         print opt
 

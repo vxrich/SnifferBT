@@ -117,7 +117,7 @@ def hciScanAll():
         print "-----------------------------------------------"
 
         try:
-            devices.append(ScanedDevice(RPI_ID, ' '.join(d[d.index(TAG[0])+1]), d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None)) 
+            devices.append(ScanedDevice(RPI_ID, ''.join(d[d.index(TAG[0])+1]), d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None)) 
         except ValueError:
             devices.append(ScanedDevice(RPI_ID, "RANDOM", d[d.index(TAG[1])+1], d[d.index(TAG[2])+1], None, None))     
 
