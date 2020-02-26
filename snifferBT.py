@@ -139,11 +139,11 @@ def beaconScan():
     for dev in devices:
         beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
 
+    load_obj([], beacons)
+
     print "Scan completed!"
     print "-----------------------------------------------"
 
-
-    return beacons
 
 def _insertDash(string, pos):
 
@@ -216,15 +216,7 @@ def load_devices(devices):
 Funzione per caricare oggetti nel DB serializzandoli con Pickle
 Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, ognuno nella tabella corretta
 """
-def load_obj(devices,beacons):
-
-    if devices == []:
-        if beacons == []:
-            print "There are 0 devices to load"
-        return
-    else:
-        print "There are %d devices and %d becons to load" % (len(devices), len(beacons))
-
+def load_obj(devices,beacons=[]):
 
     serialized_devices =[ pickle.dumps(dev) for dev in devices]
     serialized_beacons = [ pickle.dumps(beacon) for beacon in beacons]
@@ -234,17 +226,23 @@ def load_obj(devices,beacons):
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
 
-    for dev in serialized_devices:
-        try:
-            cur.execute(INSERT_DEVICE % (dev)) 
-        except MySQLdb.Error as e:
-            print e
-            
-    for beacon in serialized_beacons:
-        try:
-            cur.execute(INSERT_BEACON % (beacon)) 
-        except MySQLdb.Error as e:
-            print e
+    if serialized_devices:
+        for dev in serialized_devices:
+            try:
+                cur.execute(INSERT_DEVICE % (dev)) 
+            except MySQLdb.Error as e:
+                print e
+    else:
+        print "No devices to load!"
+
+    if serialized_beacons:        
+        for beacon in serialized_beacons:
+            try:
+                cur.execute(INSERT_BEACON % (beacon)) 
+            except MySQLdb.Error as e:
+                print e
+    else:
+        print "No beacons to load!"
 
     db.commit()
     db.close()
@@ -277,36 +275,36 @@ def load_beacons(beacons):
     print "Loading complete!"
     print "-----------------------------------------------"
 
-#if __init__ == "__main__":
+def scan():
+    devices = []
+    while not devices and i < SCAN_LOOP:
+        devices = hciScanAll()
+        time.sleep(2)
+        i += 1
+            
+    for dev in devices:
+        dev.printData()
 
-# while True:
+    load_obj(devices, [])
 
-devices = []
-beacons = []
+def command(arg):
+    switcher={
+        0: exit,
+        1: piAdv
+        2: scan,
+        3: beaconScan,
+        }
+    return switcher[int(arg)]()
 
-#piAdv()
 
-#beacons = beaconScan()
-    
-# devices = scan_devices() + lescan_devices()
-i = 0
+while True:
+    options = ["\n1 - Advertising", "2 - Scan", "3 - Beacon scan","0 - Uscita\n"]
+    for opt in options:
+        print opt
 
-#Se dopo lo scan la lista è vuota aspetta 10 secondi e riprova a effettuare lo scan
-while not devices and i < SCAN_LOOP:
-    devices = hciScanAll()
-    time.sleep(10)
-    i += 1
-        
+    choose = raw_input("Scegli un'opzione:")
+    command(choose)
 
-for dev in devices:
-    dev.printData()
-
-#load_devices(devices)
-#load_beacons(beacons)
-
-load_obj(devices, beacons)
-
-time.sleep(SLEEP_BETWEEN_SCAN)
 
 
 

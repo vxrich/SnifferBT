@@ -134,7 +134,7 @@ def beaconScan():
     return beacons
 
 def deserialize_devices(devices):
-
+    
     return [ pickle.loads(dev[0]) for dev in devices ]
 
 # Funzione che prende in input due circonferenze, identificate da centro e raggio
@@ -146,16 +146,20 @@ def deserialize_devices(devices):
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
 
+    print "SONO QUI"
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
     
     cur.execute(USE_DB)
 
     #Fetch dei device scansionati
-    cur.execute(SELECT_ALL_DEV)
+    cur.execute(SELECT_ALL_SER_DEV)
     fetch = cur.fetchall()
     devices = deserialize_devices(fetch)
     devices.sort(key=lambda x: x.addr)
+
+    for d in devices:
+        d.printData()
 
     #Fetch dei RPiBeacon
     cur.execute(SELECT_ALL_BEACON)
@@ -167,6 +171,11 @@ def evaluationData():
     for dev in devices:
         groups[dev.addr].append(dev)
     devices = groups.values()
+
+    for d in devices: 
+        for t in d:
+            t.printData()
+        print "########################"
 
     clean_dev = []
     #I devices sono raggruppati per addr, quindi dev è una lista
@@ -246,6 +255,7 @@ def command(arg):
         1: printData,
         2: deleteDatabase,
         3: dbStartUp,
+        4: evaluationData,
         }
     return switcher[int(arg)]()
 
@@ -254,7 +264,7 @@ os.system("sudo service mysql restart")
 dbStartUp()
 
 while True:
-    options = ["\n1 - Stampa il database", "2 - Cancella il database", "3 - Database Startup", "0 - Uscita\n"]
+    options = ["\n1 - Stampa il database", "2 - Cancella il database", "3 - Database Startup","4 - Evaluate", "0 - Uscita\n"]
     for opt in options:
         print opt
 

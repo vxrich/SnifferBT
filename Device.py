@@ -103,7 +103,7 @@ class RPiBeacon:
      
         #d = 10 ^ ((TxPower - RSSI) / (10 * n))
         N = 2
-        txPower = -64
+        txPower = -69
         return round(pow(10, float(txPower - int(rssi)) / (10 * N)),2)
 
 
