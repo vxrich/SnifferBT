@@ -290,7 +290,7 @@ def scan():
 def command(arg):
     switcher={
         0: exit,
-        1: piAdv
+        1: piAdv,
         2: scan,
         3: beaconScan,
         }
