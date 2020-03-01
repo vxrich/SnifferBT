@@ -61,6 +61,7 @@ WiFi del portatile senza essere collegato ad esso in SSH
 
 // BluezBLE //
 Non funzione, non esiste discover_devices()
+Non trova RSSI e altrim parametri utili per lo scan dei RPiBeacon
 
 // hcitool lescan //
 Vede ID107 HR ma non vede telefono e MOTO360

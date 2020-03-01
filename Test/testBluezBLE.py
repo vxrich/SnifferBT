@@ -1,18 +1,27 @@
-from bluetooth import ble 
+from bluetooth.ble import DiscoveryService
 import datetime
 
 print "-- Test Bluez BLE --"
 print "Start scanning devices ..."
 
+service = DiscoveryService()
+
 while True:
         print datetime.datetime.now()   
-        
-        devices = ble.discover_devices()
+        devices = service.discover(2)	
 
-        for device in devices:
-                print device
+        for address, name in devices.items():
+    		print("name: {}, address: {}".format(name, address))
 
         print "--------------------------------------------------------------------"
 
-#for address, name in devices.items():
-#        print("name: {}, address: {}".format(name, address))
+	for dev in devices:
+		print dev
+
+
+
+
+
+
+
+
