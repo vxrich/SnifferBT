@@ -95,7 +95,7 @@ class RPiBeacon:
         except IndexError:
             print "UUID missing parts!"
 
-        return id, location, int(x), int(y)
+        return id, location, float(x), float(y)
 
     def _rssiToMeters(self, rssi):
     
