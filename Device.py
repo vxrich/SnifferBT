@@ -90,6 +90,7 @@ class RPiBeacon:
         id, location, x ,y = "", "", None, None
 
         try:
+            print splitData[0], splitData[1], splitData[2], splitData[3]
             id, location, x, y = splitData[0], splitData[1], splitData[2], splitData[3]
         except IndexError:
             print "UUID missing parts!"
