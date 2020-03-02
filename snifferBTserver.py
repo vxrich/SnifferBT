@@ -161,9 +161,10 @@ def evaluationData():
         d.printData()
 
     #Fetch dei RPiBeacon
-    cur.execute(SELECT_ALL_BEACON)
-    fetch = cur.fetchall()
-    beacons = deserialize_devices(fetch)
+    # cur.execute(SELECT_ALL_BEACON)
+    # fetch = cur.fetchall()
+    # beacons = deserialize_devices(fetch)
+    beacons = [ RPiBeacon(b.uuid, b.addr, b.rssi) for b in CONST_BEACON ]
 
     #Raggruppo i dispositivi per MAC address
     groups = defaultdict(list)
