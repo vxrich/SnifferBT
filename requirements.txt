@@ -3,3 +3,4 @@ mysql-server
 mysql-client
 scipy 
 bluepy
+binascii

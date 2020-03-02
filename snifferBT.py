@@ -2,10 +2,10 @@
 '''
 Sniffer BlueTooth per Raspberry Pi 3
 
-Software che permette di catturare i pacchetti BlueTooth tramite una Raspberry Pi e ritornare i dati 
-in un database che sarà aggiornato anche da altri dispositivi.
+Software che permette di catturare i pacchetti BlueTooth tramite una 
+Raspberry Pi e ritornare i dati in un database che sarà aggiornato 
+anche da altri dispositivi.
 Il tutto per stimare la numero di persone presenti in un ambiente.
-
 '''
 
 #implementazione dello scanner BLE con BluePy e scanner non BLE con Bluez
@@ -13,6 +13,8 @@ Il tutto per stimare la numero di persone presenti in un ambiente.
 import datetime
 import os
 import time
+
+import binascii
 
 from bluetooth.ble import BeaconService
 import MySQLdb #Modulo interazione DB
@@ -33,8 +35,8 @@ def getPassword():
 
 
 """
-Scan dei device con tool interni a linux, i risultati vengono poi filtrati per i dispositivi
-con nome risolvibile
+Scan dei device con tool interni a linux, i risultati vengono poi filtrati per 
+i dispositivi con nome risolvibile
 """
 def hciScan():
 
@@ -51,8 +53,9 @@ def hciScan():
     scandevices.pop()
 
     #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
-    scandevices = scandevices[::2] #elimina la riga AD flags
-    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
+    scandevices = scandevices[::2] 
+    #Unisce le righe dello stesso dispositivo in un unica stringa
+    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] 
 
     for dev in scandevices:
         d = dev.split()
@@ -102,9 +105,8 @@ def hciScanAll():
         if "AD flags" in lines: 
             scandevices.pop(i)
 
-    #Unisce la riga del nome del dispositivo alla riga precedente contenente i dati relativi
-    # scandevices = scandevices[::2] #elimina la riga AD flags
-    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] #Unisce le righe dello stesso dispositivo in un unica stringa
+    #Unisce le righe dello stesso dispositivo in un unica stringa
+    scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] 
 
     print "########## SCAN DEVICES ##########"
 
@@ -170,8 +172,9 @@ def _uuidStrToHex(uuid_str, pos):
     return uuid_hex    
 
 """
-Funzione per permettere al RPi di essere identificato dagli altri sniffer, i dati di id, posizione
-ed eventuali sono salvati nel byte del manufacturer rispettando le divisione dei caratteri HEX.
+Funzione per permettere al RPi di essere identificato dagli altri sniffer, 
+i dati di id, posizione ed eventuali sono salvati nel byte del manufacturer 
+rispettando le divisione dei caratteri HEX.
 Una volta decodificati da HEX in STRING otteniamo i valori separati da un '-'
 """
 def piAdv():
@@ -185,7 +188,8 @@ def piAdv():
     print "-----------------------------------------------"
 
 """
-Funzione per il caricamento dei dispositivi trovati nel database gestito da snifferBTserver.py
+Funzione per il caricamento dei dispositivi trovati nel database gestito 
+da snifferBTserver.py
 Permette anche l'aggiornamento dell'RSSI, data e orario dei record già esistenti.
 """
 def load_devices(devices):
@@ -212,7 +216,8 @@ def load_devices(devices):
 
 """
 Funzione per caricare oggetti nel DB serializzandoli con Pickle
-Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, ognuno nella tabella corretta
+Carica sia gli oggetti ScanedDevice, sia gli oggetti RPiBeacon, 
+ognuno nella tabella corretta.
 """
 def load_obj(devices,beacons=[]):
 
@@ -249,7 +254,8 @@ def load_obj(devices,beacons=[]):
     print "-----------------------------------------------"
 
 """
-Funzione che carica sul DB nella tabella Rpi_beacon gli oggetti dei beacon scannerizzati
+Funzione che carica sul DB nella tabella Rpi_beacon gli oggetti dei beacon 
+scannerizzati.
 """
 def load_beacons(beacons):
 

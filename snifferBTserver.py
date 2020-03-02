@@ -146,7 +146,6 @@ def deserialize_devices(devices):
 #Metodo che permette di stimare le persone nell'area scansionata
 def evaluationData():
 
-    print "SONO QUI"
     db = MySQLdb.connect(HOST_NAME, ID, PSW)
     cur = db.cursor()
     
@@ -172,10 +171,10 @@ def evaluationData():
         groups[dev.addr].append(dev)
     devices = groups.values()
 
-    for d in devices: 
-        for t in d:
-            t.printData()
-        print "########################"
+    # for d in devices: 
+    #     for t in d:
+    #         t.printData()
+    #     print "########################"
 
     clean_dev = []
     #I devices sono raggruppati per addr, quindi dev è una lista
@@ -201,11 +200,13 @@ def evaluationData():
             #la retta che congiunge i 2 punti di tangenza tra le circonfereze
             circ_cp = combinations(circ,2) 
 
+
             lines = []
             #Calcolo della retta fra due circonferenze sottraendo i termini trovati, corrispondenti agli ultimi 3 termini dell'eq
             #della circonferenza. 
             
             for a,b in circ_cp:
+                print "CIRC ==>", a,b
                 line = np.subtract(a,b)
                 #lin_eq[2]= lin_eq[2]/2
                 lines.append(line)
@@ -215,7 +216,7 @@ def evaluationData():
             # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
             # delle altre sare lo stesso punto
 
-            #print lines
+            print lines
 
             A = np.array([(lines[0])[0:2], (lines[2])[0:2]])
             b = np.array([(lines[0])[2],(lines[2])[2]])
@@ -261,7 +262,7 @@ def command(arg):
 
 
 os.system("sudo service mysql restart")
-dbStartUp()
+# dbStartUp()
 
 while True:
     options = ["\n1 - Stampa il database", "2 - Cancella il database", "3 - Database Startup","4 - Evaluate", "0 - Uscita\n"]
