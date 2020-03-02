@@ -4,3 +4,4 @@ mysql-client
 scipy 
 bluepy
 binascii
+gattlib

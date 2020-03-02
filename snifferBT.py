@@ -137,7 +137,8 @@ def beaconScan():
     devices = service.scan(BEACON_SCAN_TIME)
 
     for dev in devices:
-        beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
+        # beacons.append(RPiBeacon(dev.getValueText(MANUFACTURER), dev.addr, dev.rssi))
+        beacons.append(RPiBeacon(devices[dev][0], dev, devices[dev][4]))
 
     load_obj([], beacons)
 
