@@ -164,7 +164,7 @@ def evaluationData():
     # cur.execute(SELECT_ALL_BEACON)
     # fetch = cur.fetchall()
     # beacons = deserialize_devices(fetch)
-    beacons = [ RPiBeacon(b.uuid, b.addr, b.rssi) for b in CONST_BEACON ]
+    beacons = [ RPiBeacon(b['uuid'], b['addr'], b['rssi'] ) for b in CONST_BEACON ]
 
     #Raggruppo i dispositivi per MAC address
     groups = defaultdict(list)
@@ -181,7 +181,7 @@ def evaluationData():
     #I devices sono raggruppati per addr, quindi dev è una lista
     for dev in devices:
         if len(dev) < 3:
-            print "Device %s is not found by all the RPi Beacon"
+            print "Device %s is not found by all the RPi Beacon" % (dev[0].addr)
         else:
             #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
             dev_cp = []
@@ -194,8 +194,8 @@ def evaluationData():
                     if d.rpi_id == b.rpi_id:
                         dev_cp.append((d,b)) 
                         z = b.x**2 + b.y**2 - d.distance**2 #
-                        circ.append(np.array([b.x*2,b.y*2,z])) #Ottengo le componenti utili del'eq della circonferenza che corrispondo a ax+by+c 
-                        #print b.rpi_id,b.x*2,b.y*2,z, d.distance
+                        circ.append(np.array([-b.x*2,-b.y*2,z])) #Ottengo le componenti utili del'eq della circonferenza che corrispondo a ax+by+c 
+                        print "CIRCONFERENZA ==> ", b.rpi_id,-b.x*2,-b.y*2,z, d.distance
 
             #Effettuo il prodotto cartesiano tra le circonferenze trovate in modo che nel calcolo delle eq trovo facilemente
             #la retta che congiunge i 2 punti di tangenza tra le circonfereze

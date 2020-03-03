@@ -11,16 +11,16 @@ rpi_users = [
 ]
 
 CONST_BEACON = [{
-        uuid: binascii.hexlify("rpi_1-angolodx-2.6-2.5"),
-        addr:"B8:27:EB:5B:2C:26",
-        rssi: -50 },
+        "uuid": binascii.hexlify("rpi_1-angolodx-2.6-2.5"),
+        "addr":"B8:27:EB:5B:2C:26",
+        "rssi": -69 },
     {
-        uuid: binascii.hexlify("rpi_2-angolosx-0.5-3.3"),
-        addr:"B8:27:EB:B4:1D:1A",
-        rssi: -50
+        "uuid": binascii.hexlify("rpi_2-angolosx-0.5-3.3"),
+        "addr": "B8:27:EB:B4:1D:1A",
+        "rssi": -69
     },
     {
-        uuid: binascii.hexlify("rpi_3-finestra-0.5-0.8"),
-        addr:"B8:27:EB:DA:54:43",
-        rssi: -50
+        "uuid": binascii.hexlify("rpi_3-finestra-0.5-0.8"),
+        "addr":"B8:27:EB:DA:54:43",
+        "rssi": -69
     }]
