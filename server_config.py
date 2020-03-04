@@ -24,3 +24,4 @@ CONST_BEACON = [{
         "addr":"B8:27:EB:DA:54:43",
         "rssi": -69
     }]
+

@@ -282,6 +282,7 @@ def load_beacons(beacons):
 
 def scan():
     devices = []
+    i=0
     while not devices and i < SCAN_LOOP:
         devices = hciScanAll()
         time.sleep(2)

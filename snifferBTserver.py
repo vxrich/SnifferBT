@@ -187,6 +187,9 @@ def evaluationData():
             dev_cp = []
             circ = []
         
+            if len(dev) > 3:
+                dev.pop(0)
+
             #Viene preso un dispositivo alla volta e confrontato con i RPiBeacon che ho, al corrispondete viene calcolata la 
             #circonferenza con centro RPiBeacon e raggio la distanza alla quale viene trovato il Device
             for d in dev:    
@@ -217,10 +220,12 @@ def evaluationData():
             # Le matrici A e b sono riferite a solo 2 rette, perchè per costruzione l'intersezione 
             # delle altre sare lo stesso punto
 
-            print lines
+            print "LINES ==>", lines
 
-            A = np.array([(lines[0])[0:2], (lines[2])[0:2]])
-            b = np.array([(lines[0])[2],(lines[2])[2]])
+            A = np.array([(lines[0])[0:2], (lines[1])[0:2]])
+            b = np.array([(lines[0])[2],(lines[1])[2]])
+
+            print "MATRIX ==>", A,b
             
             # points conterrá elementi del tipo np.array
             point = np.linalg.solve(A,b)
