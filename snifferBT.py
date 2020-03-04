@@ -291,7 +291,9 @@ def scan():
     for dev in devices:
         dev.printData()
 
-    load_obj(devices, [])
+
+    # load_obj(devices, [])
+    load_obj([dev for a in devices if dev.name == "L70"], [])
 
 def command(arg):
     switcher={

@@ -81,7 +81,8 @@ def deleteDatabase():
         db = MySQLdb.connect(HOST_NAME, ID, PSW)
         cur = db.cursor()
         cur.execute(USE_DB)
-        cur.execute(DELETE_DATABASE)
+        cur.execute(DELETE_DEV_TABLE)
+        cur.execute(CREATE_TABLE_SERIALIZE_DEVICE)
         return 0
     else:
         return 0
@@ -105,8 +106,14 @@ def printData():
     cur.execute(SELECT_ALL_SER_DEV)
     rows = deserialize_devices(cur.fetchall())
 
+    groups = defaultdict(list)
     for dev in rows:
-        dev.printData()
+        groups[dev.addr].append(dev)
+    devices = groups.values()
+
+    for dev in devices:
+        for d in dev:
+            d.printData()
 
     db.commit()
     db.close()
@@ -186,9 +193,19 @@ def evaluationData():
             #Prodotto cartesiano dei Beacon che hanno trovato il dispositivo
             dev_cp = []
             circ = []
-        
+            
+            #Filtro i dispositivi se trovo più una entry  per dispositivo faccio una media e ne riposto uno solo
+            dev_group = defaultdict(list)
             if len(dev) > 3:
-                dev.pop(0)
+                for d in dev:
+                    dev_group[d.rpi_id].append(d)
+                # dev = dev_groups.values()
+                dev = []
+                for key in dev_group:
+                    if len(dev_group[key]) > 1:
+                        dev.append(ScanedDevice(key,dev_group[key][0].name,dev_group[key][0].addr, sum(x.distance for x in dev_group[key])/len(dev_group[key]) ))
+                    else:
+                        dev.append(dev_group[key][0])
 
             #Viene preso un dispositivo alla volta e confrontato con i RPiBeacon che ho, al corrispondete viene calcolata la 
             #circonferenza con centro RPiBeacon e raggio la distanza alla quale viene trovato il Device
@@ -224,16 +241,23 @@ def evaluationData():
 
             A = np.array([(lines[0])[0:2], (lines[1])[0:2]])
             b = np.array([(lines[0])[2],(lines[1])[2]])
-
             print "MATRIX ==>", A,b
             
             # points conterrá elementi del tipo np.array
-            point = np.linalg.solve(A,b)
+            try:
+                point = np.linalg.solve(A,b)
+            except np.linalg.LinAlgError as err:
+                print " MATRICE SINGOLARE PER %s, %s" % (dev[0].name, dev[0].addr)
+                point = np.array([0,0])
+
+            print "PUNTO ==>", point, dev[0].addr, dev[0].name
 
             #Setto la posizione solo al primo dei 3 trovati e lo salvo nei device trovati in modo da non avere 
             # duplicati
             dev[0].setPosition(point[0],point[1])
             clean_dev.append(dev[0])
+        
+        print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
     for d in clean_dev:
         d.printData()
@@ -255,6 +279,7 @@ def evaluationData():
     # print "##################################"
     # print "  FOUND &d PERSONS IN THIS AREA!" % (count)
     # print "##################################"
+
 
 def command(arg):
     switcher={
