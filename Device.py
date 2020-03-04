@@ -14,7 +14,7 @@ class ScanedDevice:
         self.addr = addr
         #La distanza alla quale viene localizzato dal dispositivo specificati con rpi_id
         if rssi > 0: 
-            self.distance = rssi 
+            self.distance = float(rssi) 
         else: 
             self.distance = self._rssiToMeters(rssi)
         self.date = str(datetime.datetime.now().date())
