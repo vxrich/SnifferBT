@@ -22,21 +22,17 @@ import datetime
 import os
 import MySQLdb
 import time
-from datetime import datetime
 import warnings
 import cPickle as pickle
+from scipy.spatial.distance import euclidean as dist
 from itertools import combinations, groupby
 from collections import defaultdict
-
 from Device import ScanedDevice, RPiBeacon
-from GATTServices import GATTServices
-
-from scipy.spatial.distance import euclidean as dist
 import numpy as np
 from numpy.linalg import solve
-from tempfile import TemporaryFile      
+from GATTServices import GATTServices
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 from server_query import *
 from server_config import *
@@ -236,8 +232,9 @@ def evaluationData():
             # for c in circ:
             #     circle1 = plt.Circle((c[0], c[1]), c[2], color=random.choice("rgb"))
             #     ax.add_artist(circle1)
+                
             # fig.savefig('plotcircles.png')
-            # plt.show()
+            plt.show()
 
             lines = []
             #Calcolo della retta fra due circonferenze sottraendo i termini trovati, corrispondenti agli ultimi 3 termini dell'eq
@@ -280,9 +277,6 @@ def evaluationData():
             dev[0].setPosition(point[0],point[1])
             clean_dev.append(dev[0])
         
-            filename = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-            np.save(filename,[lines, circ, point])
-
         print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 
     for d in clean_dev:
