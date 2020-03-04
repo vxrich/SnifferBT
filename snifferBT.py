@@ -230,6 +230,8 @@ def load_obj(devices,beacons=[]):
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
 
+    print serialized_devices
+
     if len(serialized_devices) > 0:
         for dev in serialized_devices:
             try:
