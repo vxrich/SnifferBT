@@ -230,9 +230,7 @@ def load_obj(devices,beacons=[]):
     db = MySQLdb.connect(HOST_NAME, ID, PSW, DB_NAME, PORT)
     cur = db.cursor()
 
-    print serialized_devices
-
-    if len(serialized_devices) > 0:
+    if serialized_devices:
         for dev in serialized_devices:
             try:
                 cur.execute(INSERT_DEVICE % (dev)) 
@@ -241,7 +239,7 @@ def load_obj(devices,beacons=[]):
     else:
         print "No devices to load!"
 
-    if len(serialized_beacons) > 0:        
+    if serialized_beacons > 0:        
         for beacon in serialized_beacons:
             try:
                 cur.execute(INSERT_BEACON % (beacon)) 

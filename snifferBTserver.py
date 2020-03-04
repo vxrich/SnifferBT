@@ -263,7 +263,7 @@ def evaluationData():
             print "LINES ==>", lines
 
             A = np.array([(lines[0])[0:2], (lines[1])[0:2]])
-            b = np.array([(lines[0])[2],(lines[1])[2]])
+            b = np.array([-(lines[0])[2],-(lines[1])[2]])
             print "MATRIX ==>", A,b
             
             # points conterrá elementi del tipo np.array
