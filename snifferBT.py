@@ -104,8 +104,6 @@ def hciScanAll():
     for i, lines in enumerate(scandevices):
         if "AD flags" in lines: 
             scandevices.pop(i)
-            
-    print scandevices
 
     #Unisce le righe dello stesso dispositivo in un unica stringa
     scandevices = [i+j for i,j in zip(scandevices[::2],scandevices[1::2])] 

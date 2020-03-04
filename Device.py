@@ -13,7 +13,7 @@ class ScanedDevice:
         self.name = name
         self.addr = addr
         #La distanza alla quale viene localizzato dal dispositivo specificati con rpi_id
-        if rssi > 0: 
+        if flaot(rssi) > 0: 
             self.distance = float(rssi) 
         else: 
             self.distance = self._rssiToMeters(rssi)
