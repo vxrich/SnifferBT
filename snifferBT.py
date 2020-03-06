@@ -293,7 +293,7 @@ def scan():
 
 
     # load_obj(devices, [])
-    load_obj([dev for a in devices if dev.name == "L70"], [])
+    load_obj([a for a in devices if a.name == "L70"], [])
 
 def command(arg):
     switcher={
