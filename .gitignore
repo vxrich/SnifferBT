@@ -1,3 +1,8 @@
 #File da ignorare
 *.pyc
 client_config.py
+.npy
+img/
+log/
+old_log/
+tex/

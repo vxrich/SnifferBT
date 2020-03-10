@@ -229,16 +229,6 @@ def evaluationData():
             #la retta che congiunge i 2 punti di tangenza tra le circonfereze
             circ_cp = combinations(circ,2) 
 
-            # fig, ax = plt.subplots()
-            # plt.xlim(-20,20)
-            # plt.ylim(-20,20)
-            # ax.set_aspect(1)
-            # for c in circ:
-            #     circle1 = plt.Circle((c[0], c[1]), c[2], color=random.choice("rgb"))
-            #     ax.add_artist(circle1)
-            # fig.savefig('plotcircles.png')
-            # plt.show()
-
             lines = []
             #Calcolo della retta fra due circonferenze sottraendo i termini trovati, corrispondenti agli ultimi 3 termini dell'eq
             #della circonferenza. 
@@ -255,12 +245,6 @@ def evaluationData():
             # delle altre sare lo stesso punto
 
             # print "LINES ==>", lines
-            l = []
-            for line in lines:
-                if line[0] != 0 and line[1] != 0:
-                    l.append(line)
-            lines = l
-            print "LINES ==>", lines
 
             A = np.array([(lines[0])[0:2], (lines[1])[0:2]])
             b = np.array([-(lines[0])[2],-(lines[1])[2]])
@@ -287,6 +271,7 @@ def evaluationData():
 
     for d in clean_dev:
         d.printData()
+    
 
     # #Trovare il numerp di persone in base alla posizione dei dispositivi.
     # #09/10/19
